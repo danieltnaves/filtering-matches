@@ -1,5 +1,6 @@
 package net.spark.filteringservice.model;
 
+import com.querydsl.core.annotations.QueryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@QueryEntity
 @Document(collection = "matches")
 public class Match {
 
@@ -21,7 +23,7 @@ public class Match {
 
   private String cityName;
 
-  private String compatibilityScore;
+  private Double compatibilityScore;
 
   private Integer contactsExchanged;
 
@@ -38,5 +40,4 @@ public class Match {
   private String mainPhoto;
 
   private String religion;
-
 }
