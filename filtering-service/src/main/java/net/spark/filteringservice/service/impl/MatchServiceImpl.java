@@ -24,8 +24,7 @@ public class MatchServiceImpl implements MatchService {
   private FilterDetailsConverter filterDetailsConverter;
 
   @Autowired
-  public MatchServiceImpl(
-      MatchRepository matchRepository, FilterDetailsConverter filterDetailsConverter) {
+  public MatchServiceImpl(MatchRepository matchRepository, FilterDetailsConverter filterDetailsConverter) {
     this.matchRepository = matchRepository;
     this.filterDetailsConverter = filterDetailsConverter;
   }

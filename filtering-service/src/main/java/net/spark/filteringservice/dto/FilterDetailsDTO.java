@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.MultiValueMap;
 
 @Data
 @Builder
@@ -24,4 +25,5 @@ public class FilterDetailsDTO {
   private Integer height;
 
   private Integer distanceInKm;
+
 }

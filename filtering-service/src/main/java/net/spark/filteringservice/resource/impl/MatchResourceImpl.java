@@ -28,9 +28,9 @@ public class MatchResourceImpl implements MatchResource {
 
   @ApiOperation(
       value =
-          "Filter matches based on following details: Has photo, In contact, Favourite, Compatibility Score, Age, Height and Distance in KM",
+          "MatchFilter matches based on following details: Has photo, In contact, Favourite, Compatibility Score, Age, Height and Distance in KM",
       nickname = "filterMatchesBasedOnDetails",
-      notes = "Filter matches based on details")
+      notes = "MatchFilter matches based on details")
   @ApiResponses(
       value = {
         @ApiResponse(code = 200, message = "Found a list of matches successfully"),
@@ -68,4 +68,5 @@ public class MatchResourceImpl implements MatchResource {
                 page,
                 size));
   }
+
 }
