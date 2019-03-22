@@ -2,11 +2,12 @@ package net.spark.filteringservice.service.impl;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.Map;
+
 import lombok.extern.log4j.Log4j2;
-import net.spark.filteringservice.converter.FilterDetailsConverter;
-import net.spark.filteringservice.dto.FilterDetailsDTO;
 import net.spark.filteringservice.dto.MatchDTO;
 import net.spark.filteringservice.dto.PageMatchDTO;
+import net.spark.filteringservice.filter.match.MatchFilterChain;
 import net.spark.filteringservice.model.Match;
 import net.spark.filteringservice.repository.MatchRepository;
 import net.spark.filteringservice.service.MatchService;
@@ -21,24 +22,23 @@ public class MatchServiceImpl implements MatchService {
 
   private MatchRepository matchRepository;
 
-  private FilterDetailsConverter filterDetailsConverter;
+  private MatchFilterChain matchFilterChain;
 
   @Autowired
-  public MatchServiceImpl(MatchRepository matchRepository, FilterDetailsConverter filterDetailsConverter) {
+  public MatchServiceImpl(MatchRepository matchRepository, MatchFilterChain matchFilterChain) {
     this.matchRepository = matchRepository;
-    this.filterDetailsConverter = filterDetailsConverter;
+    this.matchFilterChain = matchFilterChain;
   }
 
   @Override
   public PageMatchDTO findMatchesBasedOnDetails(
-      final FilterDetailsDTO filterDetailsDTO, final int page, final int size) {
+      final Map<String, String> filterDetails, final int page, final int size) {
 
-    log.info("m=findMatchesBasedOnDetails, details = {}", filterDetailsDTO);
+    log.info("m=findMatchesBasedOnDetails, details = {}", filterDetails);
 
     final Page<Match> matchesBasedOnDetails =
         matchRepository.findAll(
-            filterDetailsConverter.buildPredicateFromFilterDetailsDTO(filterDetailsDTO),
-            PageRequest.of(page, size));
+            matchFilterChain.filterProcessor(filterDetails), PageRequest.of(page, size));
 
     return PageMatchDTO.builder()
         .matches(matchesBasedOnDetails.stream().map(MatchDTO::fromMatch).collect(toList()))

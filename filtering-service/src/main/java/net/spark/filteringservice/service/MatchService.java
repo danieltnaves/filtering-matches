@@ -1,9 +1,10 @@
 package net.spark.filteringservice.service;
 
-import net.spark.filteringservice.dto.FilterDetailsDTO;
+import java.util.Map;
+
 import net.spark.filteringservice.dto.PageMatchDTO;
 
 public interface MatchService {
 
-  PageMatchDTO findMatchesBasedOnDetails(FilterDetailsDTO filterDetailsDTO, int page, int size);
+  PageMatchDTO findMatchesBasedOnDetails(Map<String, String> filterDetails, int page, int size);
 }

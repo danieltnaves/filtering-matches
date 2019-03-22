@@ -1,18 +1,12 @@
 package net.spark.filteringservice.resource;
 
+import java.util.Map;
+
 import net.spark.filteringservice.dto.PageMatchDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface MatchResource {
 
   ResponseEntity<PageMatchDTO> filterMatchesBasedOnDetails(
-      Boolean hasPhoto,
-      Boolean inContact,
-      Boolean favourite,
-      Double compatibilityScore,
-      Integer age,
-      Integer height,
-      Integer distanceInKm,
-      int page,
-      int size);
+      Map<String, String> filterDetails, int page, int size);
 }

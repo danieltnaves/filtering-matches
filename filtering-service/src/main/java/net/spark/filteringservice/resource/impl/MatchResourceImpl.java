@@ -1,10 +1,11 @@
 package net.spark.filteringservice.resource.impl;
 
+import java.util.Map;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.log4j.Log4j2;
-import net.spark.filteringservice.dto.FilterDetailsDTO;
 import net.spark.filteringservice.dto.PageMatchDTO;
 import net.spark.filteringservice.resource.MatchResource;
 import net.spark.filteringservice.service.MatchService;
@@ -43,30 +44,11 @@ public class MatchResourceImpl implements MatchResource {
       method = RequestMethod.GET)
   @Override
   public ResponseEntity<PageMatchDTO> filterMatchesBasedOnDetails(
-      @RequestParam(value = "has_photo", required = false) Boolean hasPhoto,
-      @RequestParam(value = "in_contact", required = false) Boolean inContact,
-      @RequestParam(value = "favourite", required = false) Boolean favourite,
-      @RequestParam(value = "compatibility_score", required = false) Double compatibilityScore,
-      @RequestParam(value = "age", required = false) Integer age,
-      @RequestParam(value = "height", required = false) Integer height,
-      @RequestParam(value = "distance_in_km", required = false) Integer distanceInKm,
+      @RequestParam Map<String, String> filterDetails,
       @RequestParam(value = "page", required = true) int page,
       @RequestParam(value = "size", required = true) int size) {
     log.info("m=filterMatchesBasedOnDetails, page = {}, size = {}", page, size);
     return ResponseEntity.ok()
-        .body(
-            matchService.findMatchesBasedOnDetails(
-                FilterDetailsDTO.builder()
-                    .hasPhoto(hasPhoto)
-                    .inContact(inContact)
-                    .favourite(favourite)
-                    .compatibilityScore(compatibilityScore)
-                    .age(age)
-                    .height(height)
-                    .distanceInKm(distanceInKm)
-                    .build(),
-                page,
-                size));
+        .body(matchService.findMatchesBasedOnDetails(filterDetails, page, size));
   }
-
 }

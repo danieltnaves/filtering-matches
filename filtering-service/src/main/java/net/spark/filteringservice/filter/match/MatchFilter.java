@@ -1,13 +1,13 @@
 package net.spark.filteringservice.filter.match;
 
-import com.querydsl.core.BooleanBuilder;
-import net.spark.filteringservice.dto.FilterDetailsDTO;
-import net.spark.filteringservice.model.QMatch;
-
+import java.util.Map;
 import java.util.Optional;
+
+import com.querydsl.core.BooleanBuilder;
+import net.spark.filteringservice.model.QMatch;
 
 public interface MatchFilter {
 
   Optional<BooleanBuilder> process(
-      FilterDetailsDTO filterDetailsDTO, QMatch qMatch, BooleanBuilder filterDetailsPredicate);
+      Map<String, String> filterDetails, QMatch qMatch, BooleanBuilder filterDetailsPredicate);
 }
