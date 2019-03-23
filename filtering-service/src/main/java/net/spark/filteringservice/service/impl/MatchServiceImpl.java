@@ -5,8 +5,8 @@ import static java.util.stream.Collectors.toList;
 import java.util.Map;
 
 import lombok.extern.log4j.Log4j2;
-import net.spark.filteringservice.dto.MatchDTO;
-import net.spark.filteringservice.dto.PageMatchDTO;
+import net.spark.filteringservice.dto.MatchDto;
+import net.spark.filteringservice.dto.PageMatchDto;
 import net.spark.filteringservice.filter.match.MatchFilterChain;
 import net.spark.filteringservice.model.Match;
 import net.spark.filteringservice.repository.MatchRepository;
@@ -31,7 +31,7 @@ public class MatchServiceImpl implements MatchService {
   }
 
   @Override
-  public PageMatchDTO findMatchesBasedOnDetails(
+  public PageMatchDto findMatchesBasedOnDetails(
       final Map<String, String> filterDetails, final int page, final int size) {
 
     log.info("m=findMatchesBasedOnDetails, details = {}", filterDetails);
@@ -40,8 +40,8 @@ public class MatchServiceImpl implements MatchService {
         matchRepository.findAllMatchesByFilterDetails(
             matchFilterChain.filterProcessor(filterDetails), PageRequest.of(page, size));
 
-    return PageMatchDTO.builder()
-        .matches(matchesBasedOnDetails.stream().map(MatchDTO::fromMatch).collect(toList()))
+    return PageMatchDto.builder()
+        .matches(matchesBasedOnDetails.stream().map(MatchDto::fromMatch).collect(toList()))
         .totalMatches(matchesBasedOnDetails.getTotalElements())
         .totalMatchesPages(matchesBasedOnDetails.getTotalPages())
         .build();

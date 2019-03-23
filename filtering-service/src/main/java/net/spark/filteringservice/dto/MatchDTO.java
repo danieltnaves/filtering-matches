@@ -10,7 +10,7 @@ import net.spark.filteringservice.model.Match;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MatchDTO {
+public class MatchDto {
 
   private Integer age;
 
@@ -32,8 +32,8 @@ public class MatchDTO {
 
   private String religion;
 
-  public static MatchDTO fromMatch(final Match match) {
-    return MatchDTO.builder()
+  public static MatchDto fromMatch(final Match match) {
+    return MatchDto.builder()
         .age(match.getAge())
         .cityName(match.getCityName())
         .compatibilityScore(match.getCompatibilityScore())

@@ -1,6 +1,6 @@
 package net.spark.filteringservice.filter.match.impl;
 
-import net.spark.filteringservice.filter.match.MatchFilterTemplate;
+import net.spark.filteringservice.filter.match.MatchFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Component
 @Order(1)
-public class HasPhotoMatchFilter extends MatchFilterTemplate {
+public class HasPhotoMatchFilter extends MatchFilter {
 
   private static final String HAS_PHOTO = "has_photo";
 

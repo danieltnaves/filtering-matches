@@ -1,15 +1,25 @@
-package net.spark.filteringservice;
+package net.spark.filteringservice.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import net.spark.filteringservice.dto.PageMatchDto;
+import net.spark.filteringservice.filter.match.MatchFilterChain;
+import net.spark.filteringservice.filter.match.impl.AgeMatchFilter;
+import net.spark.filteringservice.filter.match.impl.HeightMatchFilter;
 import net.spark.filteringservice.model.Match;
 import net.spark.filteringservice.repository.MatchRepository;
+import net.spark.filteringservice.service.impl.MatchServiceImpl;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MatchServiceTests {
@@ -85,7 +95,7 @@ public class MatchServiceTests {
             5,
             "Juan",
             true,
-            140.5,
+            130.5,
             "Pilot",
             null,
             "http://path.to/photo.jpg",
@@ -94,10 +104,23 @@ public class MatchServiceTests {
 
   @Test
   public void filterMatchesBasedOnDetailsPageableTest() {
-    //    when(matchRepository.findMatchesBasedOnDetails(any(), any(Pageable.class)))
-    //        .thenReturn(new PageImpl<>(matches));
-    //    matchRepository.findMatchesBasedOnDetails(null, PageRequest.of(1, 3));
-    //    MatchService matchService = new MatchServiceImpl(matchRepository);
-    //    matchService.findMatchesBasedOnDetails(null, 1, 5);
+    when(matchRepository.findAllMatchesByFilterDetails(any(), any(Pageable.class)))
+        .thenReturn(new PageImpl<>(matches));
+
+    MatchFilterChain matchFilterChain =
+        new MatchFilterChain(Arrays.asList(new HeightMatchFilter(), new AgeMatchFilter()));
+
+    MatchService matchService = new MatchServiceImpl(matchRepository, matchFilterChain);
+
+    Map<String, String> filterDetails = new HashMap<>();
+    filterDetails.put("height", "140");
+    filterDetails.put("age", "40");
+
+    PageMatchDto matchesBasedOnDetails = matchService.findMatchesBasedOnDetails(filterDetails, 1, 10);
+    Assert.assertEquals("Alice", matchesBasedOnDetails.getMatches().get(0).getDisplayName());
+    Assert.assertEquals("Bob", matchesBasedOnDetails.getMatches().get(1).getDisplayName());
+    Assert.assertEquals("Bryan", matchesBasedOnDetails.getMatches().get(2).getDisplayName());
+    Assert.assertEquals("Rose", matchesBasedOnDetails.getMatches().get(3).getDisplayName());
+    Assert.assertEquals("Juan", matchesBasedOnDetails.getMatches().get(4).getDisplayName());
   }
 }

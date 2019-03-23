@@ -5,9 +5,9 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.Map;
 
-public abstract class MatchFilterTemplate {
+public abstract class MatchFilter {
 
-  void process(Map<String, String> filterDetails, Query query) {
+  public void process(Map<String, String> filterDetails, Query query) {
     if (validateFilterDetails(filterDetails)) {
       validateDomainValues(filterDetails);
       addCriteriaToQuery(filterDetails, query);

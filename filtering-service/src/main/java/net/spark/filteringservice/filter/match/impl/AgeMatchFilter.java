@@ -1,6 +1,6 @@
 package net.spark.filteringservice.filter.match.impl;
 
-import net.spark.filteringservice.filter.match.MatchFilterTemplate;
+import net.spark.filteringservice.filter.match.MatchFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Component
 @Order(5)
-public class AgeMatchFilter extends MatchFilterTemplate {
+public class AgeMatchFilter extends MatchFilter {
 
   private static final String AGE = "age";
 

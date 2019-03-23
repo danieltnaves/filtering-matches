@@ -1,6 +1,6 @@
 package net.spark.filteringservice.filter.match.impl;
 
-import net.spark.filteringservice.filter.match.MatchFilterTemplate;
+import net.spark.filteringservice.filter.match.MatchFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 @Order(7)
-public class DistanceInKmFilter extends MatchFilterTemplate {
+public class DistanceInKmFilter extends MatchFilter {
 
   private static final String DISTANCE_IN_KM = "distance_in_km";
 

@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageMatchDTO {
+public class PageMatchDto {
 
-  private List<MatchDTO> matches;
+  private List<MatchDto> matches;
 
   private long totalMatches;
 

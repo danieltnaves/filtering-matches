@@ -1,7 +1,7 @@
 package net.spark.filteringservice.filter.match.impl;
 
 import com.google.common.base.CaseFormat;
-import net.spark.filteringservice.filter.match.MatchFilterTemplate;
+import net.spark.filteringservice.filter.match.MatchFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 @Order(4)
-public class CompatibilityScoreMatchFilter extends MatchFilterTemplate {
+public class CompatibilityScoreMatchFilter extends MatchFilter {
 
   private static final String COMPATIBILITY_SCORE = "compatibility_score";
 
@@ -27,7 +27,7 @@ public class CompatibilityScoreMatchFilter extends MatchFilterTemplate {
   @Override
   protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
     return Double.valueOf(filterDetails.get(COMPATIBILITY_SCORE)) < MINIMUM_COMPATIBILITY_SCORE
-        || Double.valueOf(filterDetails.get(COMPATIBILITY_SCORE)) < MAXIMUM_COMPATIBILITY_SCORE;
+        || Double.valueOf(filterDetails.get(COMPATIBILITY_SCORE)) > MAXIMUM_COMPATIBILITY_SCORE;
   }
 
   @Override
