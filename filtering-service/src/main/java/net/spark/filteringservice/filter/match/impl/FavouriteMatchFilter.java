@@ -1,27 +1,32 @@
 package net.spark.filteringservice.filter.match.impl;
 
-import java.util.Map;
-import java.util.Optional;
-
-import com.querydsl.core.BooleanBuilder;
-import net.spark.filteringservice.filter.match.MatchFilter;
-import net.spark.filteringservice.model.QMatch;
+import net.spark.filteringservice.filter.match.MatchFilterTemplate;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 @Order(3)
-public class FavouriteMatchFilter implements MatchFilter {
+public class FavouriteMatchFilter extends MatchFilterTemplate {
 
-  public static final String FAVOURITE = "favourite";
+  private static final String FAVOURITE = "favourite";
 
   @Override
-  public Optional<BooleanBuilder> process(
-      final Map<String, String> filterDetails,
-      final QMatch qMatch,
-      final BooleanBuilder filterDetailsPredicate) {
-    return Optional.ofNullable(filterDetails.get(FAVOURITE))
-        .map(favourite -> qMatch.favourite.eq(Boolean.valueOf(favourite)))
-        .map(filterDetailsPredicate::and);
+  protected boolean validateFilterDetails(Map<String, String> filterDetails) {
+    return filterDetails != null && filterDetails.containsKey(FAVOURITE);
+  }
+
+  @Override
+  protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
+    return !filterDetails.get(FAVOURITE).equals("true")
+        && !filterDetails.get(FAVOURITE).equals("false");
+  }
+
+  @Override
+  protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
+    query.addCriteria(Criteria.where(FAVOURITE).is(Boolean.valueOf(filterDetails.get(FAVOURITE))));
   }
 }

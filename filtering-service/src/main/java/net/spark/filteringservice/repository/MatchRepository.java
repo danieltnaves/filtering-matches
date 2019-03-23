@@ -6,5 +6,4 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MatchRepository
-    extends MongoRepository<Match, String>, QuerydslPredicateExecutor<Match> {}
+public interface MatchRepository extends MongoRepository<Match, String>, MatchRepositoryCustom {}

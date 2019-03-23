@@ -37,7 +37,7 @@ public class MatchServiceImpl implements MatchService {
     log.info("m=findMatchesBasedOnDetails, details = {}", filterDetails);
 
     final Page<Match> matchesBasedOnDetails =
-        matchRepository.findAll(
+        matchRepository.findAllMatchesByFilterDetails(
             matchFilterChain.filterProcessor(filterDetails), PageRequest.of(page, size));
 
     return PageMatchDTO.builder()

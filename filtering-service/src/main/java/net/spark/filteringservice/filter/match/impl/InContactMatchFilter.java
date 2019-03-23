@@ -1,31 +1,38 @@
 package net.spark.filteringservice.filter.match.impl;
 
-import java.util.Map;
-import java.util.Optional;
-
-import com.querydsl.core.BooleanBuilder;
-import net.spark.filteringservice.filter.match.MatchFilter;
-import net.spark.filteringservice.model.QMatch;
+import net.spark.filteringservice.filter.match.MatchFilterTemplate;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 @Order(2)
-public class InContactMatchFilter implements MatchFilter {
+public class InContactMatchFilter extends MatchFilterTemplate {
 
-  public static final String IN_CONTACT = "in_contact";
+  private static final String IN_CONTACT = "in_contact";
+
+  private static final String CONTACTS_EXCHANGED = "contactsExchanged";
 
   @Override
-  public Optional<BooleanBuilder> process(
-      final Map<String, String> filterDetails,
-      final QMatch qMatch,
-      final BooleanBuilder filterDetailsPredicate) {
-    return Optional.ofNullable(filterDetails.get(IN_CONTACT))
-        .map(
-            inContact ->
-                Boolean.valueOf(inContact)
-                    ? qMatch.contactsExchanged.gt(0)
-                    : qMatch.contactsExchanged.eq(0))
-        .map(filterDetailsPredicate::and);
+  protected boolean validateFilterDetails(Map<String, String> filterDetails) {
+    return filterDetails != null && filterDetails.containsKey(IN_CONTACT);
+  }
+
+  @Override
+  protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
+    return !filterDetails.get(IN_CONTACT).equals("true")
+        && !filterDetails.get(IN_CONTACT).equals("false");
+  }
+
+  @Override
+  protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
+    if (Boolean.valueOf(filterDetails.get(IN_CONTACT))) {
+      query.addCriteria(Criteria.where(CONTACTS_EXCHANGED).gt(0));
+    } else {
+      query.addCriteria(Criteria.where(CONTACTS_EXCHANGED).is(0));
+    }
   }
 }

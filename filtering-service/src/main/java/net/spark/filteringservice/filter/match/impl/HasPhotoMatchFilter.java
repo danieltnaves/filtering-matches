@@ -1,31 +1,38 @@
 package net.spark.filteringservice.filter.match.impl;
 
-import java.util.Map;
-import java.util.Optional;
-
-import com.querydsl.core.BooleanBuilder;
-import net.spark.filteringservice.filter.match.MatchFilter;
-import net.spark.filteringservice.model.QMatch;
+import net.spark.filteringservice.filter.match.MatchFilterTemplate;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 @Order(1)
-public class HasPhotoMatchFilter implements MatchFilter {
+public class HasPhotoMatchFilter extends MatchFilterTemplate {
 
-  public static final String HAS_PHOTO = "has_photo";
+  private static final String HAS_PHOTO = "has_photo";
+
+  private static final String MAIN_PHOTO = "mainPhoto";
 
   @Override
-  public Optional<BooleanBuilder> process(
-      final Map<String, String> filterDetails,
-      final QMatch qMatch,
-      final BooleanBuilder filterDetailsPredicate) {
-    return Optional.ofNullable(filterDetails.get(HAS_PHOTO))
-        .map(
-            hasPhoto ->
-                Boolean.valueOf(hasPhoto)
-                    ? qMatch.mainPhoto.isNotEmpty()
-                    : qMatch.mainPhoto.isEmpty())
-        .map(filterDetailsPredicate::and);
+  protected boolean validateFilterDetails(Map<String, String> filterDetails) {
+    return filterDetails != null && filterDetails.containsKey(HAS_PHOTO);
+  }
+
+  @Override
+  protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
+    return !filterDetails.get(HAS_PHOTO).equals("true")
+        && !filterDetails.get(HAS_PHOTO).equals("false");
+  }
+
+  @Override
+  protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
+    if (Boolean.valueOf(filterDetails.get(HAS_PHOTO))) {
+      query.addCriteria(Criteria.where(MAIN_PHOTO).exists(true).ne(null));
+    } else {
+      query.addCriteria(Criteria.where(MAIN_PHOTO).exists(false));
+    }
   }
 }

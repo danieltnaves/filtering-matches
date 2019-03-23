@@ -1,27 +1,37 @@
 package net.spark.filteringservice.filter.match.impl;
 
-import java.util.Map;
-import java.util.Optional;
-
-import com.querydsl.core.BooleanBuilder;
-import net.spark.filteringservice.filter.match.MatchFilter;
-import net.spark.filteringservice.model.QMatch;
+import net.spark.filteringservice.filter.match.MatchFilterTemplate;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 @Order(5)
-public class AgeMatchFilter implements MatchFilter {
+public class AgeMatchFilter extends MatchFilterTemplate {
 
-  public static final String AGE = "age";
+  private static final String AGE = "age";
+
+  private static final int MINIMUM_AGE = 18;
+
+  private static final int MAXIMUM_AGE = 95;
 
   @Override
-  public Optional<BooleanBuilder> process(
-      final Map<String, String> filterDetails,
-      final QMatch qMatch,
-      final BooleanBuilder filterDetailsPredicate) {
-    return Optional.ofNullable(filterDetails.get(AGE))
-        .map(age -> qMatch.age.between(18, Integer.valueOf(age)))
-        .map(filterDetailsPredicate::and);
+  protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
+    return Integer.valueOf(filterDetails.get(AGE)) < MINIMUM_AGE
+        || Integer.valueOf(filterDetails.get(AGE)) > MAXIMUM_AGE;
+  }
+
+  @Override
+  protected boolean validateFilterDetails(Map<String, String> filterDetails) {
+    return filterDetails != null && filterDetails.containsKey(AGE);
+  }
+
+  @Override
+  protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
+    query.addCriteria(
+        Criteria.where(AGE).gte(MINIMUM_AGE).lte(Integer.valueOf(filterDetails.get(AGE))));
   }
 }
