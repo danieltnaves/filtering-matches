@@ -35,7 +35,7 @@ public class HeightMatchFilterTests {
     filterDetails.put("height", "150");
     heightMatchFilter.process(filterDetails, query);
     assertEquals(
-        "Query: { \"height\" : { \"$gte\" : 135, \"$lte\" : 150 } }, Fields: { }, Sort: { }",
+        "Query: { \"heightInCm\" : { \"$gte\" : 135, \"$lte\" : 150 } }, Fields: { }, Sort: { }",
         query.toString());
   }
 
