@@ -46,15 +46,6 @@ public class SwaggerConfiguration {
   @Value("${swagger.api.basePackage}")
   private String basePackage;
 
-  @Value("${server.port}")
-  private String serverPort;
-
-  @Value("${server.contextPath}")
-  private String contextPath;
-
-  @Value("${server.hostname}")
-  private String hostName;
-
   @Bean
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)

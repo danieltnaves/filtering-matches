@@ -15,4 +15,10 @@ public class GlobalExceptionHandler {
     public void handleBadRequest(BadRequestException e) {
         log.error("m=handleBadRequest, Bad Request, {}", e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler(NoContentException.class)
+    public void handleNoContent(NoContentException e) {
+        log.error("m=handleNoContent, No Content, {}", e.getMessage());
+    }
 }

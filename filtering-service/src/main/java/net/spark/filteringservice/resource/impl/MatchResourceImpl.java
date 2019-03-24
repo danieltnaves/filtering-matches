@@ -35,6 +35,7 @@ public class MatchResourceImpl implements MatchResource {
   @ApiResponses(
       value = {
         @ApiResponse(code = 200, message = "Found a list of matches successfully"),
+        @ApiResponse(code = 204, message = "No matches found"),
         @ApiResponse(code = 400, message = "Invalid input, object invalid")
       })
   @RequestMapping(

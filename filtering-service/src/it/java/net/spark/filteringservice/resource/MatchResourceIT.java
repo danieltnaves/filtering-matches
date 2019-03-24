@@ -59,6 +59,16 @@ public class MatchResourceIT {
   }
 
   @Test
+  public void resultWithNoContentTest() throws Exception {
+    final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add(PAGE, "0");
+    params.add(SIZE, "100");
+    params.add("age", "19");
+    log.info("m=resultWithNoContentTest, filter = {}", params);
+    mvc.perform(get(MATCH_FILTER_API).params(params)).andExpect(status().isNoContent());
+  }
+
+  @Test
   public void filterResultsWithPageAndSizeTest() throws Exception {
     final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add(PAGE, "0");
