@@ -18,6 +18,8 @@ public class HeightMatchFilter extends MatchFilter {
 
   private static final int MAXIMUM_HEIGHT = 210;
 
+  public static final String HEIGHT_IN_CM = "heightInCm";
+
   @Override
   protected boolean validateFilterDetails(Map<String, String> filterDetails) {
     return filterDetails != null && filterDetails.containsKey(HEIGHT);
@@ -32,6 +34,6 @@ public class HeightMatchFilter extends MatchFilter {
   @Override
   protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
     query.addCriteria(
-        Criteria.where(HEIGHT).gte(MINIMUM_HEIGHT).lte(Integer.valueOf(filterDetails.get(HEIGHT))));
+        Criteria.where(HEIGHT_IN_CM).gte(MINIMUM_HEIGHT).lte(Integer.valueOf(filterDetails.get(HEIGHT))));
   }
 }
