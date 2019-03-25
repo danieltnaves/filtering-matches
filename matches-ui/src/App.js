@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from './components/Header'
-import UserList from './components/UserList.js'
+import Container from './components/Container'
 
 class App extends Component {
   render() {
@@ -8,7 +8,7 @@ class App extends Component {
       <div className="App">
         <React.Fragment>
           <Header />
-          <UserList />
+          <Container />
         </React.Fragment>
       </div>
     );

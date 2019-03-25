@@ -33,35 +33,10 @@ const styles = theme => ({
   },
   cardContent: {
     flexGrow: 1,
-  },
-  filterWrapper: {
-    backgroundColor: theme.palette.background.paper,
-  },
-  filterContent: {
-    maxWidth: 1100,
-    margin: '0 auto'
-  },
-  root: {
-    display: 'flex',
-  },
-  formControl: {
-    margin: theme.spacing.unit * 3,
-  },
-  rangeText: {
-    marginBottom: 30,
-    marginTop: 15
-  },
-  rangeWrapper: {
-    marginBottom: 30
-  },
-
+  }
 });
 
 class MatchList extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   render () {
 

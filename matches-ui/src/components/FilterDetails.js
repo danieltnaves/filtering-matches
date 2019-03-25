@@ -13,39 +13,12 @@ import 'react-input-range/lib/css/index.css'
 import globalVal from '../globalVar';
 
 const styles = theme => ({
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-      width: 1100,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  cardGrid: {
-    padding: `${theme.spacing.unit * 8}px 0`,
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%',
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
   filterWrapper: {
     backgroundColor: theme.palette.background.paper,
   },
   filterContent: {
     maxWidth: 1100,
     margin: '0 auto'
-  },
-  root: {
-    display: 'flex',
   },
   formControl: {
     margin: theme.spacing.unit * 3,
@@ -57,7 +30,6 @@ const styles = theme => ({
   rangeWrapper: {
     marginBottom: 30
   },
-
 });
 
 const API = globalVal.FILTERING_SERVICE_ENDPOINT;
@@ -77,15 +49,22 @@ class FilterDetails extends Component {
       distanceInKm: 30
     }
   }
-
+  
   componentDidMount() {
     fetch(API)
-      .then(response => response.json())
-      .then(data => this.updateMatches(data.matches));
+      .then(response => { 
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error('Erro calling filter endpoint.');
+      })
+      .then(data => { 
+        this.updateMatches(data.matches)
+      })
+      .catch(function(error) {
+        console.log('Initial call error: ', error.message)
+      });
   }
-
-
-
 
   handleChange = name => event => {
     this.setState(
@@ -93,45 +72,28 @@ class FilterDetails extends Component {
       () => {
         this.verifyFilters()
      })
-
   }
 
   verifyFilters = () => {
-
     var parameters = '';
-
-    if (this.state.hasPhoto) {
-      parameters += "&has_photo=true"
-    }
-
-    if (this.state.inContact) {
-      parameters += "&in_contact=true"
-    }
-
-    if (this.state.favourite) {
-      parameters += "&favourite=true"
-    }
-
-    if (this.state.compatibilityScore > 1) {
-      parameters += "&compatibility_score=" + (this.state.compatibilityScore / 100);
-    }
-
-    if (this.state.age > 18) {
-      parameters += "&age=" + this.state.age;
-    }
-
-    if (this.state.height > 135) {
-      parameters += "&height=" + this.state.height;
-    }
-
-    if (this.state.distanceInKm > 30) {
-      parameters += "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865";
-    }
-
+    parameters += this.state.hasPhoto ? "&has_photo=true" : "";
+    parameters += this.state.inContact ? "&in_contact=true" : "";
+    parameters += this.state.favourite ? "&favourite=true" : "";
+    parameters += this.state.compatibilityScore > 1 ? "&compatibility_score=" + (this.state.compatibilityScore / 100) : "";
+    parameters += this.state.age > 18 ? "&age=" + this.state.age : "";
+    parameters += this.state.height > 135 ? "&height=" + this.state.height : "";
+    parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : "";
     fetch(API + parameters)
-      .then(response => response.json())
-      .then(data => this.updateMatches(data.matches));
-      
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error('Results not found.')
+      })
+     .then(data => this.updateMatches(data.matches))
+     .catch(function(error) {
+        console.log('No results: ', error.message)
+      });
   }
 
   updateMatches = (matches) => {
