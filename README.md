@@ -1,5 +1,7 @@
 # Filtering Matches
 
+**Note: I'm stronger in the back-end I've concentrated more time and effort on that.**
+
 This project was made with the following technologies: 
 
 Back-end: Spring Boot, Spring MVC and Spring Data
