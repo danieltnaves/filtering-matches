@@ -25,7 +25,7 @@ public class MatchDtoTests {
                 null,
                 "http://photo",
                 "Religion"));
-    assertEquals(new Integer(20), matchDto.getAge());
+    assertEquals(Integer.valueOf(20), matchDto.getAge());
     assertEquals("Uberlandia", matchDto.getCityName());
     assertEquals(new Double(0.5), matchDto.getCompatibilityScore());
     assertEquals("Daniel", matchDto.getDisplayName());

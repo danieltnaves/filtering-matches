@@ -7,7 +7,6 @@ import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import net.spark.filteringservice.dto.MatchDto;
 import net.spark.filteringservice.dto.PageMatchDto;
-import net.spark.filteringservice.exception.BadRequestException;
 import net.spark.filteringservice.exception.NoContentException;
 import net.spark.filteringservice.filter.match.MatchFilterChain;
 import net.spark.filteringservice.model.Match;

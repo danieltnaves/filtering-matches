@@ -29,7 +29,7 @@ public class InContactMatchFilter extends MatchFilter {
 
   @Override
   protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
-    if (Boolean.valueOf(filterDetails.get(IN_CONTACT))) {
+    if (Boolean.parseBoolean(filterDetails.get(IN_CONTACT))) {
       query.addCriteria(Criteria.where(CONTACTS_EXCHANGED).gt(0));
     } else {
       query.addCriteria(Criteria.where(CONTACTS_EXCHANGED).is(0));

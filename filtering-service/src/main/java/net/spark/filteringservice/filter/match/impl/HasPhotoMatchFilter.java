@@ -29,7 +29,7 @@ public class HasPhotoMatchFilter extends MatchFilter {
 
   @Override
   protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
-    if (Boolean.valueOf(filterDetails.get(HAS_PHOTO))) {
+    if (Boolean.parseBoolean(filterDetails.get(HAS_PHOTO))) {
       query.addCriteria(Criteria.where(MAIN_PHOTO).exists(true).ne(null));
     } else {
       query.addCriteria(Criteria.where(MAIN_PHOTO).exists(false));

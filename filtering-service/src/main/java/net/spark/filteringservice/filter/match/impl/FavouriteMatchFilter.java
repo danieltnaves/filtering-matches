@@ -27,6 +27,6 @@ public class FavouriteMatchFilter extends MatchFilter {
 
   @Override
   protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
-    query.addCriteria(Criteria.where(FAVOURITE).is(Boolean.valueOf(filterDetails.get(FAVOURITE))));
+    query.addCriteria(Criteria.where(FAVOURITE).is(Boolean.parseBoolean(filterDetails.get(FAVOURITE))));
   }
 }

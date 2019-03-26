@@ -20,8 +20,8 @@ public class AgeMatchFilter extends MatchFilter {
 
   @Override
   protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
-    return Integer.valueOf(filterDetails.get(AGE)) < MINIMUM_AGE
-        || Integer.valueOf(filterDetails.get(AGE)) > MAXIMUM_AGE;
+    return Integer.parseInt(filterDetails.get(AGE)) < MINIMUM_AGE
+        || Integer.parseInt(filterDetails.get(AGE)) > MAXIMUM_AGE;
   }
 
   @Override

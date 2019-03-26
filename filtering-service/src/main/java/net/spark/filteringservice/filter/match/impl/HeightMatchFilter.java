@@ -27,13 +27,13 @@ public class HeightMatchFilter extends MatchFilter {
 
   @Override
   protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
-    return Integer.valueOf(filterDetails.get(HEIGHT)) < MINIMUM_HEIGHT
-        || Integer.valueOf(filterDetails.get(HEIGHT)) > MAXIMUM_HEIGHT;
+    return Integer.parseInt(filterDetails.get(HEIGHT)) < MINIMUM_HEIGHT
+        || Integer.parseInt(filterDetails.get(HEIGHT)) > MAXIMUM_HEIGHT;
   }
 
   @Override
   protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
     query.addCriteria(
-        Criteria.where(HEIGHT_IN_CM).gte(MINIMUM_HEIGHT).lte(Integer.valueOf(filterDetails.get(HEIGHT))));
+        Criteria.where(HEIGHT_IN_CM).gte(MINIMUM_HEIGHT).lte(Integer.parseInt(filterDetails.get(HEIGHT))));
   }
 }

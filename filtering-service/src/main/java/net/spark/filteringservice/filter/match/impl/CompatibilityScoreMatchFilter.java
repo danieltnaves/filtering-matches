@@ -26,8 +26,8 @@ public class CompatibilityScoreMatchFilter extends MatchFilter {
 
   @Override
   protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
-    return Double.valueOf(filterDetails.get(COMPATIBILITY_SCORE)) < MINIMUM_COMPATIBILITY_SCORE
-        || Double.valueOf(filterDetails.get(COMPATIBILITY_SCORE)) > MAXIMUM_COMPATIBILITY_SCORE;
+    return Double.parseDouble(filterDetails.get(COMPATIBILITY_SCORE)) < MINIMUM_COMPATIBILITY_SCORE
+        || Double.parseDouble(filterDetails.get(COMPATIBILITY_SCORE)) > MAXIMUM_COMPATIBILITY_SCORE;
   }
 
   @Override

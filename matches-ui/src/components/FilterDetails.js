@@ -53,16 +53,7 @@ class FilterDetails extends Component {
   }
   
   componentDidMount() {
-    fetch(API)
-      .then(response => { 
-        if (response.status === 200) {
-          return response.json()
-        }
-        return DEFAULT_RESPONSE;
-      })
-      .then(data => { 
-        this.updateMatches(data.matches)
-      });
+    this.callEndpoint(API)
   }
 
   handleChange = name => event => {
@@ -73,9 +64,8 @@ class FilterDetails extends Component {
      })
   }
 
-  verifyFilters = () => {
-    var parameters = this.verifyParameters();
-    fetch(API + parameters)
+  callEndpoint = (endpoint) => {
+    fetch(endpoint)
       .then(response => {
         if (response.status === 200) {
           return response.json()
@@ -83,6 +73,10 @@ class FilterDetails extends Component {
         return DEFAULT_RESPONSE;
       })
      .then(data => this.updateMatches(data.matches));
+  }
+
+  verifyFilters = () => {
+    this.callEndpoint(API + this.verifyParameters())
   }
 
   verifyParameters = () => {
