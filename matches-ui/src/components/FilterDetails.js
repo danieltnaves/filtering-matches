@@ -9,6 +9,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import InputRange from 'react-input-range';
+import Pagination from "material-ui-flat-pagination";
 import 'react-input-range/lib/css/index.css'
 import globalVal from '../globalVar';
 
@@ -58,9 +59,7 @@ class FilterDetails extends Component {
         if (response.status === 200) {
           return response.json()
         }
-        if (response.status === 204) {
-          return DEFAULT_RESPONSE;
-        }
+        return DEFAULT_RESPONSE;
       })
       .then(data => { 
         this.updateMatches(data.matches)
@@ -82,9 +81,7 @@ class FilterDetails extends Component {
         if (response.status === 200) {
           return response.json()
         }
-        if (response.status === 204) {
-          return DEFAULT_RESPONSE;
-        }
+        return DEFAULT_RESPONSE;
       })
      .then(data => this.updateMatches(data.matches));
   }
