@@ -32,6 +32,6 @@ public class AgeMatchFilter extends MatchFilter {
   @Override
   protected void addCriteriaToQuery(Map<String, String> filterDetails, Query query) {
     query.addCriteria(
-        Criteria.where(AGE).gte(MINIMUM_AGE).lte(Integer.valueOf(filterDetails.get(AGE))));
+        Criteria.where(AGE).gte(MINIMUM_AGE).lte(Integer.parseInt(filterDetails.get(AGE))));
   }
 }

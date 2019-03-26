@@ -52,6 +52,6 @@ public class DistanceInKmFilter extends MatchFilter {
 
   private GeoJsonPoint getGeoJsonPoint(Map<String, String> filterDetails) {
     return new GeoJsonPoint(
-        Double.valueOf(filterDetails.get(LONGITUDE)), Double.valueOf(filterDetails.get(LATITUDE)));
+        Double.parseDouble(filterDetails.get(LONGITUDE)), Double.parseDouble(filterDetails.get(LATITUDE)));
   }
 }

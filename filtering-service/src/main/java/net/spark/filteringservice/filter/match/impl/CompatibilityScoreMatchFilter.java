@@ -35,6 +35,6 @@ public class CompatibilityScoreMatchFilter extends MatchFilter {
     query.addCriteria(
         Criteria.where(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, COMPATIBILITY_SCORE))
             .gte(MINIMUM_COMPATIBILITY_SCORE)
-            .lte(Double.valueOf(filterDetails.get(COMPATIBILITY_SCORE))));
+            .lte(Double.parseDouble(filterDetails.get(COMPATIBILITY_SCORE))));
   }
 }
