@@ -71,7 +71,7 @@ Execute install command:
 
 Execute run command:
 
-`npm run`
+`npm start`
 
 You should see a new process running on port `3000` [endpoint](http://localhost:3000 "http://localhost:3000"). 
 
