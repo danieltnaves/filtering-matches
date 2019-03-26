@@ -9,7 +9,6 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import InputRange from 'react-input-range';
-import Pagination from "material-ui-flat-pagination";
 import 'react-input-range/lib/css/index.css'
 import globalVal from '../globalVar';
 
@@ -118,19 +117,19 @@ class FilterDetails extends Component {
               <FormGroup row>
                 <FormControlLabel
                   control={
-                    <Checkbox checked={this.state.hasPhoto} onChange={this.handleChange('hasPhoto')} />
+                    <Checkbox id="hasPhoto" checked={this.state.hasPhoto} onChange={this.handleChange('hasPhoto')} />
                   }
                   label="Has Photo?"
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox checked={this.state.inContact} onChange={this.handleChange('inContact')} />
+                    <Checkbox id="inContact" checked={this.state.inContact} onChange={this.handleChange('inContact')} />
                   }
                   label="In Contact?"
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox checked={this.state.favourite} onChange={this.handleChange('favourite')} />
+                    <Checkbox id="favourite" checked={this.state.favourite} onChange={this.handleChange('favourite')} />
                   }
                   label="Favourite?"
                 />
@@ -140,6 +139,7 @@ class FilterDetails extends Component {
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Compatibility Score</Typography>
                   <InputRange
+                        id="compatibilityScore"
                         maxValue={99}
                         minValue={1}
                         formatLabel={value => `${value} %`}
@@ -150,6 +150,7 @@ class FilterDetails extends Component {
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Age</Typography>
                   <InputRange
+                        id="age"
                         maxValue={95}
                         minValue={18}
                         formatLabel={value => `${value} years`}
@@ -160,6 +161,7 @@ class FilterDetails extends Component {
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Height</Typography>
                   <InputRange
+                        id="height"
                         maxValue={210}
                         minValue={135}
                         formatLabel={value => `${value} cm`}
@@ -170,6 +172,7 @@ class FilterDetails extends Component {
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Distance in KM</Typography>
                   <InputRange
+                        id="distanceInKm"
                         maxValue={300}
                         minValue={30}
                         formatLabel={value => `${value} KM`}

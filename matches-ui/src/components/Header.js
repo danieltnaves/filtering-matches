@@ -24,7 +24,7 @@ class Header extends Component {
             <CssBaseline />
             <AppBar position="static">
               <Toolbar>
-                <Typography variant="h6" color="inherit" className={classes.grow}>
+                <Typography variant="h5" color="inherit" className={classes.grow}>
                     Filtering Matches
                 </Typography>
                 <Chip
