@@ -2,9 +2,11 @@
 
 This project was made with the following technologies: 
 
-Back-end: Spring Boot, Spring MVC and Spring Data.
-Front-end: React.
-Database: Mongo DB.
+Back-end: Spring Boot, Spring MVC and Spring Data
+
+Front-end: React
+
+Database: Mongo DB
 
 ### Requeriments to build and run the application
 
@@ -63,12 +65,15 @@ Example of HTTP request with all filters:
 
 Go to the project root directory `$DIRECTORY_PATH/filtering-matches/matches-ui`.
 
-Execute install and run command:
+Execute install command:
 
 `npm install`
+
+Execute run command:
+
 `npm run`
 
-You should see a new process running on port `3000`.
+You should see a new process running on port `3000` [endpoint](http://localhost:3000 "http://localhost:3000"). 
 
 I'm using **Cypress** to run some screen integration tests:
 
@@ -77,6 +82,8 @@ https://www.cypress.io/
 To open **Cypress** runner execude the following command as root:
 
 `sudo npm run cypress:open`
+
+The **Cypress** runner application will be opened. Click on **Run all specs** to execute screen tests.
 
 
 
