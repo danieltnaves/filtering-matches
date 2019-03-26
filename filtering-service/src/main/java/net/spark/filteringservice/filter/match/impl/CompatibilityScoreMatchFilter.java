@@ -15,7 +15,7 @@ public class CompatibilityScoreMatchFilter extends MatchFilter {
 
   private static final String COMPATIBILITY_SCORE = "compatibility_score";
 
-  private static final double MINIMUM_COMPATIBILITY_SCORE = 0.1;
+  private static final double MINIMUM_COMPATIBILITY_SCORE = 0.01;
 
   private static final double MAXIMUM_COMPATIBILITY_SCORE = 0.99;
 

@@ -34,6 +34,8 @@ const styles = theme => ({
 
 const API = globalVal.FILTERING_SERVICE_ENDPOINT;
 
+const DEFAULT_RESPONSE = { matches : [], totalMatches: 0, totalMatchesPages: 0 };
+
 class FilterDetails extends Component {
 
   constructor(props) {
@@ -53,16 +55,15 @@ class FilterDetails extends Component {
   componentDidMount() {
     fetch(API)
       .then(response => { 
-        if (response.ok) {
+        if (response.status === 200) {
           return response.json()
         }
-        throw new Error('Erro calling filter endpoint.');
+        if (response.status === 204) {
+          return DEFAULT_RESPONSE;
+        }
       })
       .then(data => { 
         this.updateMatches(data.matches)
-      })
-      .catch(function(error) {
-        console.log('Initial call error: ', error.message)
       });
   }
 
@@ -75,6 +76,20 @@ class FilterDetails extends Component {
   }
 
   verifyFilters = () => {
+    var parameters = this.verifyParameters();
+    fetch(API + parameters)
+      .then(response => {
+        if (response.status === 200) {
+          return response.json()
+        }
+        if (response.status === 204) {
+          return DEFAULT_RESPONSE;
+        }
+      })
+     .then(data => this.updateMatches(data.matches));
+  }
+
+  verifyParameters = () => {
     var parameters = '';
     parameters += this.state.hasPhoto ? "&has_photo=true" : "";
     parameters += this.state.inContact ? "&in_contact=true" : "";
@@ -83,17 +98,7 @@ class FilterDetails extends Component {
     parameters += this.state.age > 18 ? "&age=" + this.state.age : "";
     parameters += this.state.height > 135 ? "&height=" + this.state.height : "";
     parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : "";
-    fetch(API + parameters)
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        }
-        throw new Error('Results not found.')
-      })
-     .then(data => this.updateMatches(data.matches))
-     .catch(function(error) {
-        console.log('No results: ', error.message)
-      });
+    return parameters;
   }
 
   updateMatches = (matches) => {
