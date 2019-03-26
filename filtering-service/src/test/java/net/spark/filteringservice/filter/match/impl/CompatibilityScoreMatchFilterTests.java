@@ -35,7 +35,7 @@ public class CompatibilityScoreMatchFilterTests {
     filterDetails.put("compatibility_score", "0.7");
     compatibilityScoreMatchFilter.process(filterDetails, query);
     assertEquals(
-        "Query: { \"compatibilityScore\" : { \"$gte\" : 0.1, \"$lte\" : 0.7 } }, Fields: { }, Sort: { }",
+        "Query: { \"compatibilityScore\" : { \"$gte\" : 0.01, \"$lte\" : 0.7 } }, Fields: { }, Sort: { }",
         query.toString());
   }
 
