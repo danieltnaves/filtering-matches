@@ -11,6 +11,10 @@ pipeline {
         dockerImage = ''
     }
 
+    triggers {
+        pollSCM('')
+    }
+
     stages {
         stage('Build') {
             steps {
