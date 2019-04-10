@@ -11,11 +11,6 @@ pipeline {
         dockerImage = ''
     }
 
-    triggers {
-        pollSCM('')
-    }
-    
-
     stages {
         stage('Build') {
             steps {
@@ -25,7 +20,13 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true test -f ./filtering-service/pom.xml'
+                sh 'mvn test -f ./filtering-service/pom.xml'
+            }
+        }
+
+        stage('Integration Test') {
+            steps {
+                sh 'mvn clean integration-test -f ./filtering-service/pom.xml'
             }
         }
 
