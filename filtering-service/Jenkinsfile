@@ -59,5 +59,11 @@ pipeline {
             }
         }
 
+        stage('Create release tag on Git') {
+            steps {
+                sh 'git tag release_${BUILD_NUMBER}'
+            }
+        }
+
     }
 }
