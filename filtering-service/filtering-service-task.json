@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "image": "docker.io/danieltnaves/filtering-service:%BUILD_NUMBER%",
-      "name": "filtering-service-task",
+      "name": "filtering-service-container",
       "cpu": 10,
       "memory": 256,
       "essential": true,
