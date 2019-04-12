@@ -2,7 +2,7 @@
 
 This project was made with the following technologies: 
 
-Back-end: Spring Boot, Spring MVC and Spring Data.
+Back-end: Spring Boot, Spring MVC and Spring Data
 
 Front-end: React
 
