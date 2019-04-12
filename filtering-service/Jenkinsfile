@@ -48,5 +48,13 @@ pipeline {
             }
         }
 
+        stage('Deploy to ECS') {
+            steps {
+                sh 'sed -e "s;%BUILD_NUMBER%;${BUILD_NUMBER};g" filtering-service-task.json > filtering-service-task_${BUILD_NUMBER}.json'
+                sh 'aws ecs register-task-definition --cli-input-json file://filtering-service-task_${BUILD_NUMBER}.json'
+                sh 'aws ecs update-service --cluster ecs-filtering-service-api --service filtering-service --task-definition filtering-service-task:${BUILD_NUMBER} --desired-count 2'
+            }
+        }
+
     }
 }

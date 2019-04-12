@@ -1,0 +1,18 @@
+{
+  "family": "filtering-service-task",
+  "containerDefinitions": [
+    {
+      "image": "docker.io/danieltnaves/filtering-service:%BUILD_NUMBER%",
+      "name": "filtering-service-task",
+      "cpu": 10,
+      "memory": 256,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080
+        }
+      ]
+    }
+  ]
+}
