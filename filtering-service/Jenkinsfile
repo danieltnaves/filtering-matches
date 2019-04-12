@@ -52,8 +52,8 @@ pipeline {
             steps {
                 sh 'sed -e "s;%BUILD_NUMBER%;${BUILD_NUMBER};g" ./filtering-service/filtering-service-task.json > filtering-service-task_${BUILD_NUMBER}.json'
                 sh 'aws ecs register-task-definition --cli-input-json file://filtering-service-task_${BUILD_NUMBER}.json --region us-east-1'
-                sh 'TASK_REVISION=`aws ecs describe-task-definition --task-definition filtering-service-task | egrep "revision" | tr "/" " " | awk \'{print $2}\' | sed \'s/"$//\'`'
-                sh 'aws ecs update-service --cluster ecs-filtering-service-api --service filtering-service --task-definition filtering-service-task:${TASK_REVISION} --desired-count 2'
+                sh 'export FILTERING_SERVICE_TASK_REVISION=`aws ecs describe-task-definition --task-definition filtering-service-task | egrep "revision" | tr "/" " " | awk \'{print $2}\' | sed \'s/"$//\'`'
+                sh 'aws ecs update-service --cluster ecs-filtering-service-api --service filtering-service --task-definition filtering-service-task:${FILTERING_SERVICE_TASK_REVISION} --desired-count 2'
             }
         }
 
