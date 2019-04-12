@@ -24,11 +24,11 @@ pipeline {
             }
         }
 
-        stage('Integration Test') {
-            steps {
-                sh 'mvn clean integration-test -f ./filtering-service/pom.xml'
-            }
-        }
+//        stage('Integration Test') {
+//            steps {
+//                sh 'mvn clean integration-test -f ./filtering-service/pom.xml'
+//            }
+//        }
 
         stage('Build Docker Image') {
             steps {
