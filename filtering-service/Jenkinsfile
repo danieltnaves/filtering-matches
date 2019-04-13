@@ -61,8 +61,10 @@ pipeline {
 
         stage('Create tag on Git') {
             steps {
-                sh 'git tag release_${BUILD_NUMBER}'
-                sh 'git push --tags'
+                sh '''
+                    git tag release_${BUILD_NUMBER}
+                    git push origin release_${BUILD_NUMBER}
+                  '''
             }
         }
 
