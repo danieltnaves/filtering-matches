@@ -89,17 +89,20 @@ The **Cypress** runner application will be opened. Click on **Run all specs** to
 
 I've created a Jenkins Pipeline for Continuous Delivery on Amazon ECS. The pipeline has the following steps:
 
-1 - Checkout git branch
-2 - Build the project to check consistency 
-3 - Run Unit Tests
-4 - Run Integration Tests
-5 - Build Docker Image
-6 - Publish Docker Image on Registry
-7 - Deploy on Amazon ECS
+1. Checkout git branch
+2. Build the project to check consistency 
+3. Run Unit Tests
+4. Run Integration Tests
+5. Build Docker Image
+6. Publish Docker Image on Registry
+7. Deploy on Amazon ECS
 
-Jenkins URL: http://3.213.122.252:8080
-Docker Image Registry: https://cloud.docker.com/u/danieltnaves/repository/docker/danieltnaves/filtering-service
-Amazon EC2 Load Balancer to access de application: http://elb-filtering-service-1382639944.us-east-1.elb.amazonaws.com/swagger-ui.html
+
+[Jenkins URL](http://3.213.122.252:8080 "http://3.213.122.252:8080")
+
+[Docker Image Registry URL](https://cloud.docker.com/u/danieltnaves/repository/docker/danieltnaves/filtering-service "https://cloud.docker.com/u/danieltnaves/repository/docker/danieltnaves/filtering-service") 
+
+[Amazon EC2 Load Balancer to access de application](http://elb-filtering-service-1382639944.us-east-1.elb.amazonaws.com/swagger-ui.html "http://elb-filtering-service-1382639944.us-east-1.elb.amazonaws.com/swagger-ui.html")
 
 
 
