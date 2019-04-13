@@ -61,10 +61,10 @@ pipeline {
 
         stage('Create tag on Git') {
             steps {
-                sh '''
-                    git tag release_${BUILD_NUMBER}
-                    git push origin release_${BUILD_NUMBER}
-                  '''
+                withCredentials([usernamePassword(credentialsId: your_credentials, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    sh "git tag release_${BUILD_NUMBER}"
+                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repository} release_${BUILD_NUMBER}"
+                }
             }
         }
 
