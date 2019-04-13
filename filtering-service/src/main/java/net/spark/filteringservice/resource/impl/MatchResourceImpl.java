@@ -29,7 +29,7 @@ public class MatchResourceImpl implements MatchResource {
 
   @ApiOperation(
       value =
-          "MatchFilter matches based on following details: Has photo, In contact, Favourite, Compatibility Score, Age, Height and Distance in KM.",
+          "MatchFilter matches based on following details: Has photo, In contact, Favourite, Compatibility Score, Age, Height and Distance in KM",
       nickname = "filterMatchesBasedOnDetails",
       notes = "MatchFilter matches based on details")
   @ApiResponses(
