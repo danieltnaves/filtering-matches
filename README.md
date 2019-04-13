@@ -97,12 +97,13 @@ I've created a Jenkins Pipeline for Continuous Delivery on Amazon ECS. The pipel
 6. Publish Docker Image on Registry
 7. Deploy on Amazon ECS
 
-
 [Jenkins URL](http://3.213.122.252:8080 "http://3.213.122.252:8080")
 
 [Docker Image Registry URL](https://cloud.docker.com/u/danieltnaves/repository/docker/danieltnaves/filtering-service "https://cloud.docker.com/u/danieltnaves/repository/docker/danieltnaves/filtering-service") 
 
 [Amazon EC2 Load Balancer to access de application](http://elb-filtering-service-1382639944.us-east-1.elb.amazonaws.com/swagger-ui.html "http://elb-filtering-service-1382639944.us-east-1.elb.amazonaws.com/swagger-ui.html")
+
+[Ansible + Terraform to provisioning Jenkins infrastructure](https://github.com/danieltnaves/jenkins-ansible "https://github.com/danieltnaves/jenkins-ansible")
 
 
 
