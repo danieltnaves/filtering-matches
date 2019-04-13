@@ -24,11 +24,11 @@ pipeline {
             }
         }
 
-//        stage('Integration Test') {
-//            steps {
-//                sh 'mvn clean integration-test -f ./filtering-service/pom.xml'
-//            }
-//        }
+        stage('Integration Test') {
+            steps {
+                sh 'mvn clean integration-test -f ./filtering-service/pom.xml'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -56,15 +56,6 @@ pipeline {
                     FILTERING_SERVICE_TASK_REVISION=`aws ecs describe-task-definition --task-definition filtering-service-task | egrep "revision" | tr "/" " " | awk \'{print $2}\' | sed \'s/"$//\'`
                     aws ecs update-service --cluster ecs-filtering-service-api --service filtering-service --task-definition filtering-service-task:${FILTERING_SERVICE_TASK_REVISION} --desired-count 2
                    '''
-            }
-        }
-
-        stage('Create tag on Git') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: your_credentials, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh "git tag release_${BUILD_NUMBER}"
-                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repository} release_${BUILD_NUMBER}"
-                }
             }
         }
 
