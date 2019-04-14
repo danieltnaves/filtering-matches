@@ -51,12 +51,13 @@ class FilterDetails extends Component {
       height: 135,
       distanceInKm: 30,
       offset: 0,
-      limit: 8
+      limit: 8,
+      filtersCount: 0
     }
   }
   
   componentDidMount() {
-    this.callEndpoint(API + "?page=0&size=" + this.state.limit)
+    this.callEndpoint(API + "&page=0&size=" + this.state.limit)
   }
 
   handleChange = name => event => {
@@ -91,8 +92,21 @@ class FilterDetails extends Component {
     parameters += this.state.age > 18 ? "&age=" + this.state.age : ""
     parameters += this.state.height > 135 ? "&height=" + this.state.height : ""
     parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : ""
-    parameters += "?page=" + offset / this.state.limit
+    
+    var currentFilterCount = parameters.split("=").length - 1
+    parameters += "&page=" + (currentFilterCount !== this.state.filtersCount ? 0 : offset / this.state.limit)
+
+    if (currentFilterCount !== this.state.filtersCount) {
+      this.setState({ 
+        offset : 0
+      })
+    }
+
+    this.setState({ 
+      filtersCount : currentFilterCount,
+    })
     parameters += "&size=" + this.state.limit
+
     return parameters
   }
 
@@ -150,7 +164,7 @@ class FilterDetails extends Component {
                         formatLabel={value => `${value} %`}
                         value={this.state.compatibilityScore}
                         onChange={value => this.setState({ compatibilityScore: value })}
-                        onChangeComplete={value => this.verifyFilters()} />
+                        onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Age</Typography>
@@ -161,7 +175,7 @@ class FilterDetails extends Component {
                         formatLabel={value => `${value} years`}
                         value={this.state.age}
                         onChange={value => this.setState({ age: value })}
-                        onChangeComplete={value => this.verifyFilters()} />
+                        onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Height</Typography>
@@ -172,7 +186,7 @@ class FilterDetails extends Component {
                         formatLabel={value => `${value} cm`}
                         value={this.state.height}
                         onChange={value => this.setState({ height: value })}
-                        onChangeComplete={value => this.verifyFilters()} />
+                        onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Distance in KM</Typography>
@@ -183,7 +197,7 @@ class FilterDetails extends Component {
                         formatLabel={value => `${value} KM`}
                         value={this.state.distanceInKm}
                         onChange={value => this.setState({ distanceInKm: value })}
-                        onChangeComplete={value => this.verifyFilters()} />
+                        onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
               </FormGroup>
               </FormGroup>
