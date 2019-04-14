@@ -47,7 +47,7 @@ class MatchList extends Component {
           <Grid item xs={12} sm={9}>
               <div className={classNames(classes.layout, classes.cardGrid)}>
                 <Grid container spacing={40}>
-                  {this.props.matches ? (this.props.matches.map((match, index) => (
+                  {this.props.matchesResult.matches ? (this.props.matchesResult.matches.map((match, index) => (
                     <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
                       <Card className={classes.card}>
                         <CardMedia

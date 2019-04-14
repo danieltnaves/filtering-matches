@@ -11,6 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css'
 import globalVal from '../globalVar';
+import Pagination from "material-ui-flat-pagination";
 
 const styles = theme => ({
   filterWrapper: {
@@ -41,19 +42,21 @@ class FilterDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      matches: [],
+      matchesResult: [],
       hasPhoto: false,
       inContact: false,
       favourite: false,
       compatibilityScore: 1,
       age: 18,
       height: 135,
-      distanceInKm: 30
+      distanceInKm: 30,
+      offset: 0,
+      limit: 8
     }
   }
   
   componentDidMount() {
-    this.callEndpoint(API)
+    this.callEndpoint(API + "?page=0&size=" + this.state.limit)
   }
 
   handleChange = name => event => {
@@ -70,33 +73,41 @@ class FilterDetails extends Component {
         if (response.status === 200) {
           return response.json()
         }
-        return DEFAULT_RESPONSE;
+        return DEFAULT_RESPONSE
       })
-     .then(data => this.updateMatches(data.matches));
+     .then(data => this.updateMatches(data))
   }
 
-  verifyFilters = () => {
-    this.callEndpoint(API + this.verifyParameters())
+  verifyFilters = (offset) => {
+    this.callEndpoint(API + this.verifyParameters(offset))
   }
 
-  verifyParameters = () => {
-    var parameters = '';
-    parameters += this.state.hasPhoto ? "&has_photo=true" : "";
-    parameters += this.state.inContact ? "&in_contact=true" : "";
-    parameters += this.state.favourite ? "&favourite=true" : "";
-    parameters += this.state.compatibilityScore > 1 ? "&compatibility_score=" + (this.state.compatibilityScore / 100) : "";
-    parameters += this.state.age > 18 ? "&age=" + this.state.age : "";
-    parameters += this.state.height > 135 ? "&height=" + this.state.height : "";
-    parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : "";
-    return parameters;
+  verifyParameters = (offset) => {
+    var parameters = ''
+    parameters += this.state.hasPhoto ? "&has_photo=true" : ""
+    parameters += this.state.inContact ? "&in_contact=true" : ""
+    parameters += this.state.favourite ? "&favourite=true" : ""
+    parameters += this.state.compatibilityScore > 1 ? "&compatibility_score=" + (this.state.compatibilityScore / 100) : ""
+    parameters += this.state.age > 18 ? "&age=" + this.state.age : ""
+    parameters += this.state.height > 135 ? "&height=" + this.state.height : ""
+    parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : ""
+    parameters += "?page=" + offset / this.state.limit
+    parameters += "&size=" + this.state.limit
+    return parameters
   }
 
   updateMatches = (matches) => {
+    this.setState({ matchesResult: matches });
     this.updateParentState(matches)
   }
 
   updateParentState = (matches) => {
     this.props.callbackFromParent(matches);
+  }
+
+  handleClick(offset) {
+    this.setState({ offset: offset });
+    this.verifyFilters(offset);
   }
 
   render () {
@@ -177,6 +188,15 @@ class FilterDetails extends Component {
               </FormGroup>
               </FormGroup>
             </FormControl>
+            {
+              this.state && this.state.matchesResult.totalMatches > 0 &&
+              <Pagination
+                limit={this.state.limit}
+                offset={this.state.offset}
+                total={this.state.matchesResult.totalMatches}
+                onClick={(e, offset) => this.handleClick(offset)}
+              />
+            }
             </Grid>
           </React.Fragment>
     );

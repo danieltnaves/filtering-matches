@@ -17,12 +17,12 @@ class Container extends Component {
   constructor() {
     super();
     this.state = {
-      matches: []
+      matchesResult: []
     }
   }
 
   containerCallback = (dataFromChild) => {
-    this.setState({ matches: dataFromChild });
+    this.setState({ matchesResult: dataFromChild });
   }
 
   render () {
