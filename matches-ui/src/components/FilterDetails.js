@@ -20,8 +20,6 @@ import HasPhoto from '../filters/HasPhoto'
 import HeightFilter from '../filters/HeightFilter'
 import InContact from '../filters/InContact'
 
-
-
 const styles = theme => ({
   filterWrapper: {
     backgroundColor: theme.palette.background.paper,
@@ -61,7 +59,6 @@ class FilterDetails extends Component {
         'height': 135,
         'distanceInKm' : 30,
       },
-      
       offset: 0,
       limit: 8,
       filtersCount: 0
@@ -70,14 +67,6 @@ class FilterDetails extends Component {
   
   componentDidMount() {
     this.callEndpoint(API + "&page=0&size=" + this.state.limit)
-  }
-
-  handleChange = name => event => {
-    this.setState(
-      { [name]: event.target.checked }, 
-      () => {
-        this.verifyFilters()
-     })
   }
 
   callEndpoint = (endpoint) => {
@@ -96,63 +85,45 @@ class FilterDetails extends Component {
   }
 
   verifyParameters = (offset) => {
-    var parameters = ''
-    // parameters += this.state.hasPhoto ? "&has_photo=true" : ""
-    // parameters += this.state.inContact ? "&in_contact=true" : ""
-    // parameters += this.state.favourite ? "&favourite=true" : ""
-    // parameters += this.state.compatibilityScore > 1 ? "&compatibility_score=" + (this.state.compatibilityScore / 100) : ""
-    // parameters += this.state.age > 18 ? "&age=" + this.state.age : ""
-    // parameters += this.state.height > 135 ? "&height=" + this.state.height : ""
-    // parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : ""
-
-    const ageFilter = new AgeFilter()
-    const compatibilityScore = new CompatibilityScore()
-    const distanceInKm = new DistanceInKm()
-    const favouriteFilter = new FavouriteFilter()
-    const hasPhoto = new HasPhoto();
-    const heightFilter = new HeightFilter()
-    const inContact = new InContact()
-
-    var filtersArray = []
-    filtersArray[0] = compatibilityScore;
-    filtersArray[1] = distanceInKm;
-    filtersArray[2] = favouriteFilter;
-    filtersArray[3] = hasPhoto;
-    filtersArray[4] = heightFilter;
-    filtersArray[5] = inContact;
-    filtersArray[6] = ageFilter;
-
-    filtersArray.forEach((filter) => {
-      parameters += filter.getQueryString(this.state.filters)
-    })
-
-    console.log(parameters)
-
-
-
-
-
-
-
-
-
-
+    var filtersArray = [
+      new AgeFilter(),
+      new CompatibilityScore(),
+      new DistanceInKm(),
+      new FavouriteFilter(),
+      new HasPhoto(),
+      new HeightFilter(),
+      new InContact()
+    ]
     
-    var currentFilterCount = parameters.split("=").length - 1
-    parameters += "&page=" + (currentFilterCount !== this.state.filtersCount ? 0 : offset / this.state.limit)
+    var parameters = ''
+    parameters = this.getFiltersParameters(filtersArray, this.state.filters)
+    parameters = this.getPagingParameters(parameters, offset)
+    console.log("Parameters: " + parameters)
+    
+    return parameters
+  }
 
-    if (currentFilterCount !== this.state.filtersCount) {
-      this.setState({ 
-        offset : 0
-      })
-    }
+  getPagingParameters(parameters, offset) {
+    var currentFilterCount = parameters.split("=").length - 1
+    var differentCount = currentFilterCount !== this.state.filtersCount;
+
+    parameters += "&page=" + (differentCount ? 0 : offset / this.state.limit)
+    parameters += "&size=" + this.state.limit
 
     this.setState({ 
       filtersCount : currentFilterCount,
+      offset : differentCount ? 0 : offset
     })
-    parameters += "&size=" + this.state.limit
 
-    return parameters
+    return parameters;  
+  }
+
+  getFiltersParameters(filtersArray, filtersValues) {
+    var parameters = ''
+    filtersArray.forEach((filter) => {
+      parameters += filter.getQueryString(filtersValues)
+    })  
+    return parameters   
   }
 
   updateMatches = (matches) => {
@@ -169,6 +140,16 @@ class FilterDetails extends Component {
     this.verifyFilters(offset);
   }
 
+  handleChange = name => event => {
+    const newFilters = this.state.filters
+    newFilters[name] = event.target.checked;
+    this.setState({
+      filters: newFilters
+    }, () => {
+      this.verifyFilters(0)      
+    })
+  }
+
   render () {
 
     const { classes } = this.props
@@ -181,21 +162,21 @@ class FilterDetails extends Component {
               <FormGroup row>
                 <FormControlLabel
                   control={
-                    <Checkbox id="hasPhoto" checked={this.state.filters['hasPhoto']} onChange={this.handleChange('hasPhoto')} />
+                    <Checkbox id="hasPhoto" name="hasPhoto" checked={this.state.filters['hasPhoto']} onChange={this.handleChange('hasPhoto')} />
                   }
-                  label="Has Photo?"
+                  label="Has Photo?" 
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox id="inContact" checked={this.state.filters['inContact']} onChange={this.handleChange('inContact')} />
+                    <Checkbox id="inContact" name="inContact" checked={this.state.filters['inContact']} onChange={this.handleChange('inContact')} />
                   }
                   label="In Contact?"
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox id="favourite" checked={this.state.filters['favourite']} onChange={this.handleChange('favourite')} />
+                    <Checkbox id="favourite" name="favourite" checked={this.state.filters['favourite']} onChange={this.handleChange('favourite')} />
                   }
-                  label="Favourite?"
+                  label="Favourite?" 
                 />
               </FormGroup>
               <FormGroup>
