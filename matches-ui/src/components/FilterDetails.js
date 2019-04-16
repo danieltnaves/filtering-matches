@@ -12,6 +12,15 @@ import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css'
 import globalVal from '../globalVar';
 import Pagination from "material-ui-flat-pagination";
+import AgeFilter from '../filters/AgeFilter'
+import CompatibilityScore from '../filters/CompatibilityScore'
+import DistanceInKm from '../filters/DistanceInKm'
+import FavouriteFilter from '../filters/FavouriteFilter'
+import HasPhoto from '../filters/HasPhoto'
+import HeightFilter from '../filters/HeightFilter'
+import InContact from '../filters/InContact'
+
+
 
 const styles = theme => ({
   filterWrapper: {
@@ -43,13 +52,16 @@ class FilterDetails extends Component {
     super(props);
     this.state = {
       matchesResult: [],
-      hasPhoto: false,
-      inContact: false,
-      favourite: false,
-      compatibilityScore: 1,
-      age: 18,
-      height: 135,
-      distanceInKm: 30,
+      filters : {
+        'hasPhoto': false,
+        'inContact' : false,
+        'favourite' : false,
+        'compatibilityScore' : 1,
+        'age': 18,
+        'height': 135,
+        'distanceInKm' : 30,
+      },
+      
       offset: 0,
       limit: 8,
       filtersCount: 0
@@ -85,13 +97,46 @@ class FilterDetails extends Component {
 
   verifyParameters = (offset) => {
     var parameters = ''
-    parameters += this.state.hasPhoto ? "&has_photo=true" : ""
-    parameters += this.state.inContact ? "&in_contact=true" : ""
-    parameters += this.state.favourite ? "&favourite=true" : ""
-    parameters += this.state.compatibilityScore > 1 ? "&compatibility_score=" + (this.state.compatibilityScore / 100) : ""
-    parameters += this.state.age > 18 ? "&age=" + this.state.age : ""
-    parameters += this.state.height > 135 ? "&height=" + this.state.height : ""
-    parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : ""
+    // parameters += this.state.hasPhoto ? "&has_photo=true" : ""
+    // parameters += this.state.inContact ? "&in_contact=true" : ""
+    // parameters += this.state.favourite ? "&favourite=true" : ""
+    // parameters += this.state.compatibilityScore > 1 ? "&compatibility_score=" + (this.state.compatibilityScore / 100) : ""
+    // parameters += this.state.age > 18 ? "&age=" + this.state.age : ""
+    // parameters += this.state.height > 135 ? "&height=" + this.state.height : ""
+    // parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : ""
+
+    const ageFilter = new AgeFilter()
+    const compatibilityScore = new CompatibilityScore()
+    const distanceInKm = new DistanceInKm()
+    const favouriteFilter = new FavouriteFilter()
+    const hasPhoto = new HasPhoto();
+    const heightFilter = new HeightFilter()
+    const inContact = new InContact()
+
+    var filtersArray = []
+    filtersArray[0] = compatibilityScore;
+    filtersArray[1] = distanceInKm;
+    filtersArray[2] = favouriteFilter;
+    filtersArray[3] = hasPhoto;
+    filtersArray[4] = heightFilter;
+    filtersArray[5] = inContact;
+    filtersArray[6] = ageFilter;
+
+    filtersArray.forEach((filter) => {
+      parameters += filter.getQueryString(this.state.filters)
+    })
+
+    console.log(parameters)
+
+
+
+
+
+
+
+
+
+
     
     var currentFilterCount = parameters.split("=").length - 1
     parameters += "&page=" + (currentFilterCount !== this.state.filtersCount ? 0 : offset / this.state.limit)
@@ -136,19 +181,19 @@ class FilterDetails extends Component {
               <FormGroup row>
                 <FormControlLabel
                   control={
-                    <Checkbox id="hasPhoto" checked={this.state.hasPhoto} onChange={this.handleChange('hasPhoto')} />
+                    <Checkbox id="hasPhoto" checked={this.state.filters['hasPhoto']} onChange={this.handleChange('hasPhoto')} />
                   }
                   label="Has Photo?"
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox id="inContact" checked={this.state.inContact} onChange={this.handleChange('inContact')} />
+                    <Checkbox id="inContact" checked={this.state.filters['inContact']} onChange={this.handleChange('inContact')} />
                   }
                   label="In Contact?"
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox id="favourite" checked={this.state.favourite} onChange={this.handleChange('favourite')} />
+                    <Checkbox id="favourite" checked={this.state.filters['favourite']} onChange={this.handleChange('favourite')} />
                   }
                   label="Favourite?"
                 />
@@ -162,8 +207,12 @@ class FilterDetails extends Component {
                         maxValue={99}
                         minValue={1}
                         formatLabel={value => `${value} %`}
-                        value={this.state.compatibilityScore}
-                        onChange={value => this.setState({ compatibilityScore: value })}
+                        value={this.state.filters['compatibilityScore']}
+                        onChange={value => { 
+                          const newFilters = this.state.filters
+                          newFilters['compatibilityScore'] = value
+                          this.setState({ filters: newFilters })}
+                        }
                         onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
@@ -173,8 +222,12 @@ class FilterDetails extends Component {
                         maxValue={95}
                         minValue={18}
                         formatLabel={value => `${value} years`}
-                        value={this.state.age}
-                        onChange={value => this.setState({ age: value })}
+                        value={this.state.filters['age']}
+                        onChange={value => {
+                          const newFilters = this.state.filters;
+                          newFilters['age'] = value;
+                          this.setState({ filters: newFilters })
+                        }}
                         onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
@@ -184,8 +237,12 @@ class FilterDetails extends Component {
                         maxValue={210}
                         minValue={135}
                         formatLabel={value => `${value} cm`}
-                        value={this.state.height}
-                        onChange={value => this.setState({ height: value })}
+                        value={this.state.filters['height']}
+                        onChange={value => {
+                          const newFilters = this.state.filters;
+                          newFilters['height'] = value;
+                          this.setState({ filters: newFilters })}
+                        }
                         onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
@@ -195,8 +252,12 @@ class FilterDetails extends Component {
                         maxValue={300}
                         minValue={30}
                         formatLabel={value => `${value} KM`}
-                        value={this.state.distanceInKm}
-                        onChange={value => this.setState({ distanceInKm: value })}
+                        value={this.state.filters['distanceInKm']}
+                        onChange={value => {
+                          const newFilters = this.state.filters;
+                          newFilters['distanceInKm'] = value;
+                          this.setState({ filters: newFilters })}
+                        }
                         onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
               </FormGroup>
