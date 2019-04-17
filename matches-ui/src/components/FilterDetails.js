@@ -150,6 +150,12 @@ class FilterDetails extends Component {
     })
   }
 
+  handleInputRangeChange(value, name) {
+    const newFilters = this.state.filters
+    newFilters[name] = value
+    this.setState({ filters: newFilters })  
+  }
+
   render () {
 
     const { classes } = this.props
@@ -189,11 +195,7 @@ class FilterDetails extends Component {
                         minValue={1}
                         formatLabel={value => `${value} %`}
                         value={this.state.filters['compatibilityScore']}
-                        onChange={value => { 
-                          const newFilters = this.state.filters
-                          newFilters['compatibilityScore'] = value
-                          this.setState({ filters: newFilters })}
-                        }
+                        onChange={value => { this.handleInputRangeChange(value, 'compatibilityScore')}}
                         onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
@@ -204,11 +206,7 @@ class FilterDetails extends Component {
                         minValue={18}
                         formatLabel={value => `${value} years`}
                         value={this.state.filters['age']}
-                        onChange={value => {
-                          const newFilters = this.state.filters;
-                          newFilters['age'] = value;
-                          this.setState({ filters: newFilters })
-                        }}
+                        onChange={value => { this.handleInputRangeChange(value, 'age')}}
                         onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
@@ -219,11 +217,7 @@ class FilterDetails extends Component {
                         minValue={135}
                         formatLabel={value => `${value} cm`}
                         value={this.state.filters['height']}
-                        onChange={value => {
-                          const newFilters = this.state.filters;
-                          newFilters['height'] = value;
-                          this.setState({ filters: newFilters })}
-                        }
+                        onChange={value => { this.handleInputRangeChange(value, 'height')}}
                         onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
                 <div className={classes.rangeWrapper}>
@@ -234,11 +228,7 @@ class FilterDetails extends Component {
                         minValue={30}
                         formatLabel={value => `${value} KM`}
                         value={this.state.filters['distanceInKm']}
-                        onChange={value => {
-                          const newFilters = this.state.filters;
-                          newFilters['distanceInKm'] = value;
-                          this.setState({ filters: newFilters })}
-                        }
+                        onChange={value => { this.handleInputRangeChange(value, 'distanceInKm')}}
                         onChangeComplete={value => this.verifyFilters(0)} />
                 </div>
               </FormGroup>
