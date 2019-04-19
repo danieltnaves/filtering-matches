@@ -9,6 +9,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import InputRange from 'react-input-range';
+import TextField from '@material-ui/core/TextField';
 import 'react-input-range/lib/css/index.css'
 import globalVal from '../globalVar';
 import Pagination from "material-ui-flat-pagination";
@@ -19,6 +20,7 @@ import FavouriteFilter from '../filters/FavouriteFilter'
 import HasPhoto from '../filters/HasPhoto'
 import HeightFilter from '../filters/HeightFilter'
 import InContact from '../filters/InContact'
+import NameFilter from '../filters/NameFilter';
 
 const styles = theme => ({
   filterWrapper: {
@@ -37,7 +39,7 @@ const styles = theme => ({
   },
   rangeWrapper: {
     marginBottom: 30
-  },
+  }
 });
 
 const API = globalVal.FILTERING_SERVICE_ENDPOINT;
@@ -58,6 +60,7 @@ class FilterDetails extends Component {
         'age': 18,
         'height': 135,
         'distanceInKm' : 30,
+        'name' : ''
       },
       offset: 0,
       limit: 8,
@@ -92,7 +95,8 @@ class FilterDetails extends Component {
       new FavouriteFilter(),
       new HasPhoto(),
       new HeightFilter(),
-      new InContact()
+      new InContact(),
+      new NameFilter()
     ]
     
     var parameters = ''
@@ -150,6 +154,16 @@ class FilterDetails extends Component {
     })
   }
 
+  handleTextChange = (event) => {
+    const newFilters = this.state.filters
+    newFilters[event.target.name] = event.target.value
+    this.setState({
+      filters: newFilters
+    }, () => {
+      this.verifyFilters(0)  
+    })
+  }
+
   handleInputRangeChange(value, name) {
     const newFilters = this.state.filters
     newFilters[name] = value
@@ -165,6 +179,15 @@ class FilterDetails extends Component {
         <Grid item xs={12} sm={3}>
             <FormControl component="fieldset" className={classes.formControl}>
               <FormLabel component="legend">Filtering details</FormLabel>
+              <TextField
+                id="name"
+                name="name"
+                label="Name"
+                className={classes.textField}
+                value={this.state.filters['name']}
+                onChange={this.handleTextChange}
+                margin="normal"
+              />
               <FormGroup row>
                 <FormControlLabel
                   control={
