@@ -26,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 public class MatchResourceIT {
 
+  private static final String CAROLINE = "Caroline";
+
   private static final String MATCH_FILTER_API = "/match/filter";
 
   private static final String TOTAL_MATCHES = "$.totalMatches";
@@ -203,6 +205,31 @@ public class MatchResourceIT {
   }
 
   @Test
+  public void filterNameTest() throws Exception {
+    final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add(PAGE, "0");
+    params.add(SIZE, "3");
+    params.add("name", "car");
+    log.info("m=filterNameTest, filter = {}", params);
+    mvc.perform(get(MATCH_FILTER_API).params(params))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
+            .andExpect(jsonPath("$.matches[1].displayName", is(CAROLINE)))
+            .andExpect(jsonPath(TOTAL_MATCHES, is(2)))
+            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(1)));
+  }
+
+  @Test
+  public void filterNameInvalidCaracterTest() throws Exception {
+    final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add(PAGE, "0");
+    params.add(SIZE, "3");
+    params.add("name", "car@@@");
+    log.info("m=filterNameTest, filter = {}", params);
+    mvc.perform(get(MATCH_FILTER_API).params(params)).andExpect(status().isBadRequest());
+  }
+
+  @Test
   public void verifyAllFieldsTest() throws Exception {
     final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add(PAGE, "0");
@@ -214,7 +241,7 @@ public class MatchResourceIT {
             .andExpect(jsonPath("$.matches[0].cityName", is("Leeds")))
             .andExpect(jsonPath("$.matches[0].compatibilityScore", is(0.76)))
             .andExpect(jsonPath("$.matches[0].contactsExchanged", is(2)))
-            .andExpect(jsonPath("$.matches[0].displayName", is("Caroline")))
+            .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
             .andExpect(jsonPath("$.matches[0].favourite", is(true)))
             .andExpect(jsonPath("$.matches[0].heightInCm", is(153.0)))
             .andExpect(jsonPath("$.matches[0].jobTitle", is("Corporate Lawyer")))
@@ -232,7 +259,7 @@ public class MatchResourceIT {
     log.info("m=pagedResultsTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].displayName", is("Caroline")))
+            .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
             .andExpect(jsonPath(TOTAL_MATCHES, is(25)))
             .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(2)));
     params.set(PAGE, "1");
