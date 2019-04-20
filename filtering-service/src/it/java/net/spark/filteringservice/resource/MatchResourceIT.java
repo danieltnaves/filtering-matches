@@ -1,12 +1,17 @@
 package net.spark.filteringservice.resource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.spark.filteringservice.FilteringServiceApplication;
+import net.spark.filteringservice.dto.MatchDto;
+import net.spark.filteringservice.model.Match;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = FilteringServiceApplication.class)
 @Slf4j
 public class MatchResourceIT {
+
+  private static final String MATCH = "/match";
 
   private static final String CAROLINE = "Caroline";
 
@@ -45,6 +53,8 @@ public class MatchResourceIT {
   private static final String HARLOW = "Harlow";
 
   @Autowired private WebApplicationContext webApplicationContext;
+
+  @Autowired private ObjectMapper mapper;
 
   private MockMvc mvc;
 
@@ -161,15 +171,15 @@ public class MatchResourceIT {
     params.add("favourite", "true");
     log.info("m=filterFavouriteTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].favourite", is(true)))
-            .andExpect(jsonPath("$.matches[1].favourite", is(true)))
-            .andExpect(jsonPath("$.matches[2].favourite", is(true)))
-            .andExpect(jsonPath("$.matches[3].favourite", is(true)))
-            .andExpect(jsonPath("$.matches[4].favourite", is(true)))
-            .andExpect(jsonPath("$.matches[5].favourite", is(true)))
-            .andExpect(jsonPath(TOTAL_MATCHES, is(6)))
-            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(1)));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.matches[0].favourite", is(true)))
+        .andExpect(jsonPath("$.matches[1].favourite", is(true)))
+        .andExpect(jsonPath("$.matches[2].favourite", is(true)))
+        .andExpect(jsonPath("$.matches[3].favourite", is(true)))
+        .andExpect(jsonPath("$.matches[4].favourite", is(true)))
+        .andExpect(jsonPath("$.matches[5].favourite", is(true)))
+        .andExpect(jsonPath(TOTAL_MATCHES, is(6)))
+        .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(1)));
   }
 
   @Test
@@ -180,12 +190,12 @@ public class MatchResourceIT {
     params.add("has_photo", "true");
     log.info("m=filterHasPhotoTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].mainPhoto", is(PHOTO_URL)))
-            .andExpect(jsonPath("$.matches[1].mainPhoto", is(PHOTO_URL)))
-            .andExpect(jsonPath("$.matches[2].mainPhoto", is(PHOTO_URL)))
-            .andExpect(jsonPath(TOTAL_MATCHES, is(22)))
-            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(8)));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.matches[0].mainPhoto", is(PHOTO_URL)))
+        .andExpect(jsonPath("$.matches[1].mainPhoto", is(PHOTO_URL)))
+        .andExpect(jsonPath("$.matches[2].mainPhoto", is(PHOTO_URL)))
+        .andExpect(jsonPath(TOTAL_MATCHES, is(22)))
+        .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(8)));
   }
 
   @Test
@@ -196,12 +206,12 @@ public class MatchResourceIT {
     params.add("in_contact", "true");
     log.info("m=filterInContactTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].contactsExchanged", is(2)))
-            .andExpect(jsonPath("$.matches[1].contactsExchanged", is(5)))
-            .andExpect(jsonPath("$.matches[2].contactsExchanged", is(4)))
-            .andExpect(jsonPath(TOTAL_MATCHES, is(12)))
-            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(4)));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.matches[0].contactsExchanged", is(2)))
+        .andExpect(jsonPath("$.matches[1].contactsExchanged", is(5)))
+        .andExpect(jsonPath("$.matches[2].contactsExchanged", is(4)))
+        .andExpect(jsonPath(TOTAL_MATCHES, is(12)))
+        .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(4)));
   }
 
   @Test
@@ -212,11 +222,11 @@ public class MatchResourceIT {
     params.add("name", "car");
     log.info("m=filterNameTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
-            .andExpect(jsonPath("$.matches[1].displayName", is(CAROLINE)))
-            .andExpect(jsonPath(TOTAL_MATCHES, is(2)))
-            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(1)));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
+        .andExpect(jsonPath("$.matches[1].displayName", is(CAROLINE)))
+        .andExpect(jsonPath(TOTAL_MATCHES, is(2)))
+        .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(1)));
   }
 
   @Test
@@ -236,19 +246,19 @@ public class MatchResourceIT {
     params.add(SIZE, "1");
     log.info("m=verifyAllFieldsTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].age", is(41)))
-            .andExpect(jsonPath("$.matches[0].cityName", is("Leeds")))
-            .andExpect(jsonPath("$.matches[0].compatibilityScore", is(0.76)))
-            .andExpect(jsonPath("$.matches[0].contactsExchanged", is(2)))
-            .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
-            .andExpect(jsonPath("$.matches[0].favourite", is(true)))
-            .andExpect(jsonPath("$.matches[0].heightInCm", is(153.0)))
-            .andExpect(jsonPath("$.matches[0].jobTitle", is("Corporate Lawyer")))
-            .andExpect(jsonPath("$.matches[0].mainPhoto", is(PHOTO_URL)))
-            .andExpect(jsonPath("$.matches[0].religion", is("Atheist")))
-            .andExpect(jsonPath(TOTAL_MATCHES, is(25)))
-            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(25)));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.matches[0].age", is(41)))
+        .andExpect(jsonPath("$.matches[0].cityName", is("Leeds")))
+        .andExpect(jsonPath("$.matches[0].compatibilityScore", is(0.76)))
+        .andExpect(jsonPath("$.matches[0].contactsExchanged", is(2)))
+        .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
+        .andExpect(jsonPath("$.matches[0].favourite", is(true)))
+        .andExpect(jsonPath("$.matches[0].heightInCm", is(153.0)))
+        .andExpect(jsonPath("$.matches[0].jobTitle", is("Corporate Lawyer")))
+        .andExpect(jsonPath("$.matches[0].mainPhoto", is(PHOTO_URL)))
+        .andExpect(jsonPath("$.matches[0].religion", is("Atheist")))
+        .andExpect(jsonPath(TOTAL_MATCHES, is(25)))
+        .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(25)));
   }
 
   @Test
@@ -258,17 +268,17 @@ public class MatchResourceIT {
     params.add(SIZE, "20");
     log.info("m=pagedResultsTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
-            .andExpect(jsonPath(TOTAL_MATCHES, is(25)))
-            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(2)));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.matches[0].displayName", is(CAROLINE)))
+        .andExpect(jsonPath(TOTAL_MATCHES, is(25)))
+        .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(2)));
     params.set(PAGE, "1");
     log.info("m=pagedResultsTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].displayName", is("Kysha")))
-            .andExpect(jsonPath(TOTAL_MATCHES, is(25)))
-            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(2)));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.matches[0].displayName", is("Kysha")))
+        .andExpect(jsonPath(TOTAL_MATCHES, is(25)))
+        .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(2)));
   }
 
   @Test
@@ -281,13 +291,60 @@ public class MatchResourceIT {
     params.add("height", "150");
     log.info("m=filterWithMoreThanOneParameterTest, filter = {}", params);
     mvc.perform(get(MATCH_FILTER_API).params(params))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.matches[0].displayName", is("Natalia")))
-            .andExpect(jsonPath("$.matches[1].displayName", is("Clare")))
-            .andExpect(jsonPath("$.matches[2].displayName", is("Elizabeth")))
-            .andExpect(jsonPath(TOTAL_MATCHES, is(3)))
-            .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(1)));
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.matches[0].displayName", is("Natalia")))
+        .andExpect(jsonPath("$.matches[1].displayName", is("Clare")))
+        .andExpect(jsonPath("$.matches[2].displayName", is("Elizabeth")))
+        .andExpect(jsonPath(TOTAL_MATCHES, is(3)))
+        .andExpect(jsonPath(TOTAL_MATCHES_PAGES, is(1)));
   }
 
+//  @Test
+//  public void createNewMatchTest() throws Exception {
+//    MatchDto matchDto =
+//        MatchDto.builder()
+//            .age(20)
+//            .cityName("Berlin")
+//            .compatibilityScore(0.50)
+//            .contactsExchanged(20)
+//            .displayName("Daniel")
+//            .favourite(true)
+//            .heightInCm(1.78)
+//            .jobTitle("Software Developer")
+//            .mainPhoto("")
+//            .religion("Christian")
+//            .id("123")
+//            .build();
+//    log.info("m=createNewMatchTest, match = {}", matchDto);
+//    mvc.perform(
+//            post(MATCH)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(mapper.writeValueAsString(matchDto)))
+//        .andExpect(status().isCreated());
+//  }
 
+  @Test
+  public void createInvalidNewMatchTest() throws Exception {
+    MatchDto matchDto =
+        MatchDto.builder()
+            .age(20)
+            .compatibilityScore(0.50)
+            .contactsExchanged(20)
+            .displayName("Daniel")
+            .favourite(true)
+            .heightInCm(1.78)
+            .jobTitle("Software Developer")
+            .mainPhoto("")
+            .religion("Christian")
+            .id("123")
+            .build();
+    log.info("m=createNewMatchTest, match = {}", matchDto);
+    mvc.perform(
+            post(MATCH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(matchDto)))
+        .andExpect(status().isBadRequest());
+  }
 }
