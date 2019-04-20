@@ -3,10 +3,12 @@ package net.spark.filteringservice.service.impl;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Map;
+import java.util.Optional;
 
 import lombok.extern.log4j.Log4j2;
 import net.spark.filteringservice.dto.MatchDto;
 import net.spark.filteringservice.dto.PageMatchDto;
+import net.spark.filteringservice.exception.BadRequestException;
 import net.spark.filteringservice.exception.NoContentException;
 import net.spark.filteringservice.filter.match.MatchFilterChain;
 import net.spark.filteringservice.model.Match;
@@ -50,5 +52,16 @@ public class MatchServiceImpl implements MatchService {
         .totalMatches(matchesBasedOnDetails.getTotalElements())
         .totalMatchesPages(matchesBasedOnDetails.getTotalPages())
         .build();
+  }
+
+  @Override
+  public MatchDto createNewMatch(Match match) {
+    log.info("m=createNewMatch, Creating a new match, match = {}", match);
+    if (match == null) {
+      throw new BadRequestException("Invalid match input");
+    }
+    return Optional.ofNullable(matchRepository.save(match))
+        .map(MatchDto::fromMatch)
+        .orElseThrow(() -> new BadRequestException("Failed to save a new match"));
   }
 }

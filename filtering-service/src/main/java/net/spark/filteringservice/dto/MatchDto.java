@@ -12,6 +12,8 @@ import net.spark.filteringservice.model.Match;
 @NoArgsConstructor
 public class MatchDto {
 
+  private String id;
+
   private Integer age;
 
   private String cityName;
@@ -34,6 +36,7 @@ public class MatchDto {
 
   public static MatchDto fromMatch(final Match match) {
     return MatchDto.builder()
+        .id(match.getId())
         .age(match.getAge())
         .cityName(match.getCityName())
         .compatibilityScore(match.getCompatibilityScore())

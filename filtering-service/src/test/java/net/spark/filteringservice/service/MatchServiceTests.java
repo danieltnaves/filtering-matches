@@ -3,6 +3,7 @@ package net.spark.filteringservice.service;
 import java.util.*;
 
 import net.spark.filteringservice.dto.PageMatchDto;
+import net.spark.filteringservice.exception.BadRequestException;
 import net.spark.filteringservice.filter.match.MatchFilterChain;
 import net.spark.filteringservice.filter.match.impl.AgeMatchFilter;
 import net.spark.filteringservice.filter.match.impl.HeightMatchFilter;
@@ -17,7 +18,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -117,10 +120,38 @@ public class MatchServiceTests {
     filterDetails.put("age", "40");
 
     PageMatchDto matchesBasedOnDetails = matchService.findMatchesBasedOnDetails(filterDetails, 1, 10);
-    Assert.assertEquals("Alice", matchesBasedOnDetails.getMatches().get(0).getDisplayName());
-    Assert.assertEquals("Bob", matchesBasedOnDetails.getMatches().get(1).getDisplayName());
-    Assert.assertEquals("Bryan", matchesBasedOnDetails.getMatches().get(2).getDisplayName());
-    Assert.assertEquals("Rose", matchesBasedOnDetails.getMatches().get(3).getDisplayName());
-    Assert.assertEquals("Juan", matchesBasedOnDetails.getMatches().get(4).getDisplayName());
+    assertEquals("Alice", matchesBasedOnDetails.getMatches().get(0).getDisplayName());
+    assertEquals("Bob", matchesBasedOnDetails.getMatches().get(1).getDisplayName());
+    assertEquals("Bryan", matchesBasedOnDetails.getMatches().get(2).getDisplayName());
+    assertEquals("Rose", matchesBasedOnDetails.getMatches().get(3).getDisplayName());
+    assertEquals("Juan", matchesBasedOnDetails.getMatches().get(4).getDisplayName());
+  }
+
+  @Test
+  public void createNewMatchWithSuccessTest() {
+    Match match = Match.builder()
+            .age(20)
+            .cityName("Berlin")
+            .compatibilityScore(0.50)
+            .contactsExchanged(20)
+            .displayName("Daniel")
+            .favourite(true)
+            .heightInCm(1.78)
+            .jobTitle("Software Developer")
+            .location(new GeoJsonPoint(-1.548567, 53.801277))
+            .mainPhoto("")
+            .religion("Christian")
+            .id("123")
+            .build();
+    when(matchRepository.save(any())).thenReturn(match);
+    MatchService matchService = new MatchServiceImpl(matchRepository, new MatchFilterChain(new ArrayList<>()));
+    assertEquals("Daniel", matchService.createNewMatch(match).getDisplayName());
+  }
+
+  @Test(expected = BadRequestException.class)
+  public void createFailedNewMatchTest() {
+    when(matchRepository.save(any())).thenReturn(null);
+    MatchService matchService = new MatchServiceImpl(matchRepository, new MatchFilterChain(new ArrayList<>()));
+    matchService.createNewMatch(new Match());
   }
 }
