@@ -107,7 +107,7 @@ class FilterDetails extends Component {
     return parameters
   }
 
-  getPagingParameters(parameters, offset) {
+  getPagingParameters = (parameters, offset) => {
     var currentFilterCount = parameters.split("=").length - 1
     var differentCount = currentFilterCount !== this.state.filtersCount;
 
@@ -122,7 +122,7 @@ class FilterDetails extends Component {
     return parameters;  
   }
 
-  getFiltersParameters(filtersArray, filtersValues) {
+  getFiltersParameters = (filtersArray, filtersValues) => {
     var parameters = ''
     filtersArray.forEach((filter) => {
       parameters += filter.getQueryString(filtersValues)
@@ -139,14 +139,14 @@ class FilterDetails extends Component {
     this.props.callbackFromParent(matches);
   }
 
-  handleClick(offset) {
+  handleClick = (offset) => {
     this.setState({ offset: offset });
     this.verifyFilters(offset);
   }
 
-  handleChange = name => event => {
+  handleCheckboxChange = (event) => {
     const newFilters = this.state.filters
-    newFilters[name] = event.target.checked;
+    newFilters[event.target.name] = event.target.checked;
     this.setState({
       filters: newFilters
     }, () => {
@@ -154,7 +154,7 @@ class FilterDetails extends Component {
     })
   }
 
-  handleTextChange = (event) => {
+  handleValueChange = (event) => {
     const newFilters = this.state.filters
     newFilters[event.target.name] = event.target.value
     this.setState({
@@ -164,10 +164,14 @@ class FilterDetails extends Component {
     })
   }
 
-  handleInputRangeChange(value, name) {
+  handleInputRangeChange = (value, name) => {
     const newFilters = this.state.filters
     newFilters[name] = value
-    this.setState({ filters: newFilters })  
+    this.setState({ filters: newFilters }, 
+      () => {
+        this.verifyFilters(0)
+      }
+    )  
   }
 
   render () {
@@ -185,25 +189,25 @@ class FilterDetails extends Component {
                 label="Name"
                 className={classes.textField}
                 value={this.state.filters['name']}
-                onChange={this.handleTextChange}
+                onChange={this.handleValueChange}
                 margin="normal"
               />
               <FormGroup row>
                 <FormControlLabel
                   control={
-                    <Checkbox id="hasPhoto" name="hasPhoto" checked={this.state.filters['hasPhoto']} onChange={this.handleChange('hasPhoto')} />
+                    <Checkbox id="hasPhoto" name="hasPhoto" checked={this.state.filters['hasPhoto']} onChange={this.handleCheckboxChange} />
                   }
                   label="Has Photo?" 
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox id="inContact" name="inContact" checked={this.state.filters['inContact']} onChange={this.handleChange('inContact')} />
+                    <Checkbox id="inContact" name="inContact" checked={this.state.filters['inContact']} onChange={this.handleCheckboxChange} />
                   }
                   label="In Contact?"
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox id="favourite" name="favourite" checked={this.state.filters['favourite']} onChange={this.handleChange('favourite')} />
+                    <Checkbox id="favourite" name="favourite" checked={this.state.filters['favourite']} onChange={this.handleCheckboxChange} />
                   }
                   label="Favourite?" 
                 />
@@ -218,8 +222,7 @@ class FilterDetails extends Component {
                         minValue={1}
                         formatLabel={value => `${value} %`}
                         value={this.state.filters['compatibilityScore']}
-                        onChange={value => { this.handleInputRangeChange(value, 'compatibilityScore')}}
-                        onChangeComplete={value => this.verifyFilters(0)} />
+                        onChange={value => { this.handleInputRangeChange(value, 'compatibilityScore')}} />
                 </div>
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Age</Typography>
@@ -229,8 +232,7 @@ class FilterDetails extends Component {
                         minValue={18}
                         formatLabel={value => `${value} years`}
                         value={this.state.filters['age']}
-                        onChange={value => { this.handleInputRangeChange(value, 'age')}}
-                        onChangeComplete={value => this.verifyFilters(0)} />
+                        onChange={value => { this.handleInputRangeChange(value, 'age')}} />
                 </div>
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Height</Typography>
@@ -240,8 +242,7 @@ class FilterDetails extends Component {
                         minValue={135}
                         formatLabel={value => `${value} cm`}
                         value={this.state.filters['height']}
-                        onChange={value => { this.handleInputRangeChange(value, 'height')}}
-                        onChangeComplete={value => this.verifyFilters(0)} />
+                        onChange={value => { this.handleInputRangeChange(value, 'height')}} />
                 </div>
                 <div className={classes.rangeWrapper}>
                   <Typography variant="body1" className={classes.rangeText}>Distance in KM</Typography>
@@ -251,8 +252,7 @@ class FilterDetails extends Component {
                         minValue={30}
                         formatLabel={value => `${value} KM`}
                         value={this.state.filters['distanceInKm']}
-                        onChange={value => { this.handleInputRangeChange(value, 'distanceInKm')}}
-                        onChangeComplete={value => this.verifyFilters(0)} />
+                        onChange={value => { this.handleInputRangeChange(value, 'distanceInKm')}} />
                 </div>
               </FormGroup>
               </FormGroup>
