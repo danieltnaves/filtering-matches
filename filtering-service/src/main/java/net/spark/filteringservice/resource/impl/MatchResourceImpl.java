@@ -7,14 +7,15 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.log4j.Log4j2;
 import net.spark.filteringservice.dto.PageMatchDto;
+import net.spark.filteringservice.dto.SmileDto;
 import net.spark.filteringservice.resource.MatchResource;
 import net.spark.filteringservice.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @Log4j2
@@ -51,4 +52,23 @@ public class MatchResourceImpl implements MatchResource {
     return ResponseEntity.ok()
         .body(matchService.findMatchesBasedOnDetails(filterDetails, page, size));
   }
+
+  @ApiOperation(
+      value = "Send a smile to the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 200, message = "If smile was sent"),
+        @ApiResponse(code = 400, message = "Invalid input, object invalid"),
+        @ApiResponse(code = 404, message = "The user was not found")
+      })
+  @RequestMapping(
+      value = "/smile",
+      produces = {"application/json"},
+      consumes = {"application/json"},
+      method = RequestMethod.PATCH)
+  public ResponseEntity<Void> sendSmile(@Valid @RequestBody SmileDto smileDto) {
+    matchService.sendSmile(smileDto);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
 }

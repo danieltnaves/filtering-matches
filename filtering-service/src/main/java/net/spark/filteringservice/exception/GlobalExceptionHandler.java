@@ -21,4 +21,10 @@ public class GlobalExceptionHandler {
     public void handleNoContent(NoContentException e) {
         log.error("m=handleNoContent, No Content, {}", e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public void handleNotFoundException(NotFoundException e) {
+        log.error("m=handleNotFoundException, Not found, {}", e.getMessage());
+    }
 }
