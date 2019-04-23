@@ -48,12 +48,29 @@ class FilterDetails extends Component {
       compatibilityScore: 1,
       age: 18,
       height: 135,
-      distanceInKm: 30
+      distanceInKm: 30,
+      currentPosition: this.props.currentPosition
     }
   }
   
   componentDidMount() {
     this.callEndpoint(API)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.refreshRequested) {
+      this.verifyFilters();
+    } 
+
+    if (nextProps.currentPosition !== this.state.currentPosition) {
+      this.setState({ ...this.state, currentPosition: nextProps.currentPosition }, 
+      () => {
+        this.verifyFilters();
+      })
+      
+    }
+
+    console.log(this.props.currentPosition)
   }
 
   handleChange = name => event => {
@@ -87,7 +104,9 @@ class FilterDetails extends Component {
     parameters += this.state.compatibilityScore > 1 ? "&compatibility_score=" + (this.state.compatibilityScore / 100) : "";
     parameters += this.state.age > 18 ? "&age=" + this.state.age : "";
     parameters += this.state.height > 135 ? "&height=" + this.state.height : "";
-    parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + "&longitude=-0.118092&latitude=51.509865" : "";
+    parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + this.props.currentPosition : "";
+    console.log('this.props.currentPosition', this.props.currentPosition)
+    console.log('parameters', parameters)
     return parameters;
   }
 

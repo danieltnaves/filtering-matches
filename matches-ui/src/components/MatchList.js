@@ -8,6 +8,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles'
 import 'react-input-range/lib/css/index.css'
+import Button from '@material-ui/core/Button';
+import globalVal from '../globalVar';
 
 const styles = theme => ({
   layout: {
@@ -33,10 +35,38 @@ const styles = theme => ({
   },
   cardContent: {
     flexGrow: 1,
-  }
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
 });
 
+
+
 class MatchList extends Component {
+
+  callSendSmile = (userId) => {
+    const sendSmile = {
+      userId
+    };
+    fetch(globalVal.SEND_SMILE_ENDPOINT, {
+      method: 'PATCH',
+      headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(sendSmile)
+    })
+    .then(response => {
+      if (response.status === 200) {
+        this.props.requestRefresh()
+      }
+    });
+  }
+
+  handleSendSmile = (userId) => {
+    this.callSendSmile(userId)
+  }
 
   render () {
 
@@ -83,6 +113,9 @@ class MatchList extends Component {
                           <Typography>
                           Height In CM: {match.heightInCm}
                           </Typography>
+                          <Button variant="contained" color="primary" className={classes.button} onClick={() => this.handleSendSmile(match.id)}>
+                            Send Smile
+                          </Button>
                         </CardContent>
                       </Card>
                     </Grid>
@@ -96,7 +129,8 @@ class MatchList extends Component {
 }
 
 MatchList.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  requestRefresh: PropTypes.func 
 };
 
 export default withStyles(styles)(MatchList);
