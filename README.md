@@ -1,5 +1,7 @@
 # Filtering Matches
 
+**Note: I'm stronger in the back-end I've concentrated more time and effort on that.**
+
 This project was made with the following technologies: 
 
 Back-end: Spring Boot, Spring MVC and Spring Data
@@ -56,10 +58,7 @@ If everything was fine you should see a new process running on port `8080`. To v
 
 Example of HTTP request with all filters:
 
-  `curl -X GET \
-  'http://localhost:8080/match/filter?page=0&size=10000&has_photo=true&in_contact=true&favourite=true&compatibility_score=0.82&age=84&height=200&distance_in_km=278&longitude=-0.118092&latitude=51.509865' \
-  -H 'Cache-Control: no-cache' \
-  -H 'Postman-Token: b04e2caf-cbcb-1f78-ef9c-6cc852dfeb72'`
+  `curl -X GET 'http://localhost:8080/match/filter?page=0&size=10000&has_photo=true&in_contact=true&favourite=true&compatibility_score=0.82&age=84&height=200&distance_in_km=278&longitude=-0.118092&latitude=51.509865'`
 
   ### Front-end set up
 
