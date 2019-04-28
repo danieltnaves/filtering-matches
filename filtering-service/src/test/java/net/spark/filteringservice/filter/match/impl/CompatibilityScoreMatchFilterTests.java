@@ -56,4 +56,17 @@ public class CompatibilityScoreMatchFilterTests {
     filterDetails.put("compatibility_score", "1.0");
     compatibilityScoreMatchFilter.process(filterDetails, query);
   }
+
+  @Test
+  public void minAndMaxFilterDetailsShouldCreateTwoFiltersMinAndMaxTest() {
+    MatchFilter compatibilityScoreMatchFilter = new CompatibilityScoreMatchFilter();
+    Query query = new Query();
+    HashMap<String, String> filterDetails = new HashMap<>();
+    filterDetails.put("min_compatibility_score", "0.2");
+    filterDetails.put("max_compatibility_score", "0.5");
+    compatibilityScoreMatchFilter.process(filterDetails, query);
+    assertEquals(
+        "Query: { \"compatibilityScore\" : { \"$gte\" : 0.2, \"$lte\" : 0.5 } }, Fields: { }, Sort: { }",
+        query.toString());
+  }
 }

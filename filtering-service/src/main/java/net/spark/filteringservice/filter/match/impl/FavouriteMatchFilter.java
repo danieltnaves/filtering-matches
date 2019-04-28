@@ -20,7 +20,7 @@ public class FavouriteMatchFilter extends MatchFilter {
   }
 
   @Override
-  protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
+  protected boolean areDomainValuesInvalid(Map<String, String> filterDetails) {
     return !filterDetails.get(FAVOURITE).equals("true")
         && !filterDetails.get(FAVOURITE).equals("false");
   }

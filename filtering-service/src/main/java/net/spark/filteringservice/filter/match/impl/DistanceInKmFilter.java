@@ -36,7 +36,7 @@ public class DistanceInKmFilter extends MatchFilter {
   }
 
   @Override
-  protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
+  protected boolean areDomainValuesInvalid(Map<String, String> filterDetails) {
     return Integer.parseInt(filterDetails.get(DISTANCE_IN_KM)) < MINIMUM_DISTANCE_IN_KM
         || Integer.parseInt(filterDetails.get(DISTANCE_IN_KM)) > MAXIMUM_DISTANCE_IN_KM;
   }

@@ -22,7 +22,7 @@ public class InContactMatchFilter extends MatchFilter {
   }
 
   @Override
-  protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
+  protected boolean areDomainValuesInvalid(Map<String, String> filterDetails) {
     return !filterDetails.get(IN_CONTACT).equals("true")
         && !filterDetails.get(IN_CONTACT).equals("false");
   }

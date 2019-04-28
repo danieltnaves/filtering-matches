@@ -22,7 +22,7 @@ public class HasPhotoMatchFilter extends MatchFilter {
   }
 
   @Override
-  protected boolean validateDomainValuesExpression(Map<String, String> filterDetails) {
+  protected boolean areDomainValuesInvalid(Map<String, String> filterDetails) {
     return !filterDetails.get(HAS_PHOTO).equals("true")
         && !filterDetails.get(HAS_PHOTO).equals("false");
   }

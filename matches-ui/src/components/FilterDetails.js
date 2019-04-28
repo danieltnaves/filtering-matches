@@ -45,7 +45,10 @@ class FilterDetails extends Component {
       hasPhoto: false,
       inContact: false,
       favourite: false,
-      compatibilityScore: 1,
+      compatibilityScore: {
+        min: 1,
+        max: 99
+      },
       age: 18,
       height: 135,
       distanceInKm: 30,
@@ -101,7 +104,9 @@ class FilterDetails extends Component {
     parameters += this.state.hasPhoto ? "&has_photo=true" : "";
     parameters += this.state.inContact ? "&in_contact=true" : "";
     parameters += this.state.favourite ? "&favourite=true" : "";
-    parameters += this.state.compatibilityScore > 1 ? "&compatibility_score=" + (this.state.compatibilityScore / 100) : "";
+    parameters += (this.state.compatibilityScore.min > 1 || this.state.compatibilityScore.max < 99) ? 
+    "&min_compatibility_score=" + (this.state.compatibilityScore.min / 100) 
+    + "&max_compatibility_score=" + (this.state.compatibilityScore.max / 100) : "";
     parameters += this.state.age > 18 ? "&age=" + this.state.age : "";
     parameters += this.state.height > 135 ? "&height=" + this.state.height : "";
     parameters += this.state.distanceInKm > 30 ? "&distance_in_km=" + this.state.distanceInKm + this.props.currentPosition : "";

@@ -17,12 +17,12 @@ public abstract class MatchFilter {
   protected abstract boolean validateFilterDetails(Map<String, String> filterDetails);
 
   private void validateDomainValues(Map<String, String> filterDetails) {
-    if (validateDomainValuesExpression(filterDetails)) {
+    if (areDomainValuesInvalid(filterDetails)) {
       throw new BadRequestException("Invalid filter value");
     }
   }
 
-  protected abstract boolean validateDomainValuesExpression(Map<String, String> filterDetails);
+  protected abstract boolean areDomainValuesInvalid(Map<String, String> filterDetails);
 
   protected abstract void addCriteriaToQuery(Map<String, String> filterDetails, Query query);
 }
